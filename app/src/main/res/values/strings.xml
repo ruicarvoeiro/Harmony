@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Harmony</string>
+    <string name="strBtnRecentes">Recentes</string>
+    <string name="strBtnOkPesquisa">Pesquisar</string>
+    <string name="strBtnFavoritos">Favoritos</string>
+    <string name="strEtAutor">Autor</string>
+    <string name="strEtTitulo">Título</string>
+    <string name="strTvDescricao">Esta aplicação oferece ao utilizador a hipótese de ler livros acompanhados de efeitos sonoros e música de fundo.
+        Com esta aplicação a sua leitura torna-se mais emocional e didática.
+        Qualquer dúvida sobre o seu funcionamento clicar nas Defenições -> Ajuda</string>
+    <string name="strTvSubTitulo">Bem-vindo</string>
+    <string name="strHelpCenter">Ajuda</string>
+    <string name="strAboutUs">*Rossana Naki, Rui Carvoeiro e João Barreiras*</string>
+    <string name="strAjuda">*Escrever aqui a ajuda*</string>
+    <string name="strAboutUsCenter">About Us</string>
+
+    <string-array name="nome_generos">
+        <item>Auto-Ajuda</item>
+        <item>Ciência</item>
+        <item>Culinária | Gastronomia</item>
+        <item>Esoterismo</item>
+        <item>Fantasia | Ficção</item>
+        <item>Filosofia</item>
+        <item>Guerra</item>
+        <item>História</item>
+        <item>Lingüistica</item>
+        <item>Lit. Estrangeira</item>
+        <item>Lit. Infanto-Juvenil</item>
+        <item>Lit. Nacional</item>
+        <item>Medicina</item>
+        <item>Música</item>
+        <item>Política</item>
+        <item>Psicologia</item>
+        <item>Romance</item>
+        <item>Banda-Desenhada</item>
+        <item>Religião</item>
+        <item>Saúde</item>
+        <item>Sexo</item>
+        <item>Terror</item>
+        <item>Vestibular</item>
+        <item>Crónica</item>
+        <item>Poesia</item>
+        <item>Poemas</item>
+    </string-array>
+</resources>
