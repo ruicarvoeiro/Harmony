@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     //Outros Objetos
     private AmUtil mUtil;
     private String[] mListaDeGeneros;
+    private AmFiles mFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
         mBtnRecentes = (Button) findViewById(R.id.idBtnRecentes);
 
         mUtil = new AmUtil(this);
+        mFiles = new AmFiles(this);
         mListaDeGeneros = getResources().getStringArray(R.array.nome_generos);
         mUtil.utilPopularSpinnerComOpcoes(mSpinner, mListaDeGeneros);
 
-        mClickHandler = new View.OnClickListener(){
+
+        mClickHandler = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int iQuemFoiClicked = v.getId();
@@ -61,26 +65,33 @@ public class MainActivity extends AppCompatActivity {
                     sendFavoritos();
                 if (iQuemFoiClicked == R.id.idBtnRecentes)
                     sendRecentes();
-            }//onClick
-        }; //mClickHandler
+            }//onItemClicked
+        }; //mItemClickHandler
+
         Button[] buttonsRelevantes = {mBtnOkPesquisa, mBtnFavoritos, mBtnRecentes};
         for (Button buttonDoMomento : buttonsRelevantes)
             buttonDoMomento.setOnClickListener(mClickHandler);
+
     } //init
 
+    //TODO
     private void sendRecentes() {
         sendListaDeLivros(null);
     } //sendRecentes
 
+    //TODO
     private void sendFavoritos() {
         sendListaDeLivros(null);
     } //sendFavoritos
 
+    //TODO
     private void sendResultadoPesquisa(String pStrTitulo, String pStrAutor, Object itemSelecionado) {
-        sendListaDeLivros(null);
+        sendListaDeLivros(mFiles.getAllLivros());
     } //sendResultadoPesquisa
 
-    private void sendListaDeLivros(ArrayList pArrayLivros){
+    private void sendListaDeLivros(ArrayList<File> pArrayLivros) {
+        for (File f : pArrayLivros)
+            mUtil.utilFeedback(f.getName());
         Intent intent = new Intent(this, MostrarListaActivity.class);
         intent.putExtra(ARRAY_LIVROS, pArrayLivros);
         startActivity(intent);
@@ -89,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
     /* TODO LIST:
     * 1) Criar um ficheiro ou base de dados onde fiquem armazenados os favoritos
     * 2) Criar um ficheiro ou base de dados onde fiquem armazenados os recentes
-    * 3) Criar um método getRecentes() que retorne um Arraylist de Livro, com os recentes
-    * 4) Criar um método getFavoritos() que retorne um ArrayList de Livro, com os favoritos
+    * 3) Criar um método getRecentes() que retorne um Arraylist de MyLivro, com os recentes
+    * 4) Criar um método getFavoritos() que retorne um ArrayList de MyLivro, com os favoritos
     * 5) Usar o método pesquisaDeLivros da classe AmFiles
     * 6) Utilizar os métodos criados na MainActivity, de acordo ao necessário
     *

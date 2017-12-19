@@ -25,7 +25,7 @@ public class LeituraActivity extends Activity {
         init(savedInstanceState);
     } //onCreate
 
-    void init(Bundle saveState){
+    void init(Bundle saveState) {
         //Initializar variaveis
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvMyBrowser);
@@ -44,11 +44,11 @@ public class LeituraActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.idItemActionEmptyStar ||
-            itemId == R.id.idItemActionStar) mudarEstrela();
+                itemId == R.id.idItemActionStar) mudarEstrela();
         return super.onOptionsItemSelected(item);
     } //onOptionsItemSelected
 
-    void mudarEstrela(){
+    public void mudarEstrela() {
         //TODO
     } //mudarEstrela
 

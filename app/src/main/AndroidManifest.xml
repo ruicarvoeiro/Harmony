@@ -25,7 +25,7 @@
 
                 <data android:scheme="file" />
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.YOUR_CUSTOM_FILE_EXTENSION" />
+                <data android:pathPattern=".*\\.MACOAS" />
             </intent-filter>
         </activity>
         <activity android:name=".MostrarListaActivity"></activity>

@@ -1,66 +1,108 @@
 package com.rossana.android.a261117ebookreader;
 
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Created by some bitch on 14/12/2017.
  */
 
 public class AmFiles {
-    private static final String EXTENCAO = ".PNG";
+    //Constantes
+    public static final String EXTENCAO = ".MACOAS";
 
-    public static ArrayList<File> getAllLivros() {
-        String diretorio = "Não sei";
-        // TODO: Descobrir como vamos ao diretorio raíz do dispositivo e do sd card
+    //Objetos
+    //private Activity mActivity;
+    //private AmUtil mUtil;
 
-        //Environment.getDataDirectory().getAbsolutePath()
+    //Construtor
+    /*public AmFiles(Activity pA) {
+        this.mActivity = pA;
+        this.mUtil = new AmUtil(pA);
+    }//AmUtil*/
 
-        ArrayList<File> files = filesAtDir(diretorio);
-        return files;
-    } //getAllLivros
+    public AmFiles(){} //AmFiles
 
-    //TODO: Código não testado, verificar se funciona ou não
-    public static ArrayList<File> filesAtDir(String pPathAtual){
-        ArrayList<File> livrosEncontrados = new ArrayList<File>();
-        File ficheiroOuPastaDoDiretorio = new File(pPathAtual);
-        if (ficheiroOuPastaDoDiretorio != null) {
-            if (ficheiroOuPastaDoDiretorio.isDirectory()) {
-                File[] ficheirosDentroDoDiretorio = ficheiroOuPastaDoDiretorio.listFiles();
-
-                for (File ficheiro : ficheirosDentroDoDiretorio) {
-                    if (ficheiro.isFile()) {
-                        if(temAExtencaoCorreta(ficheiro.getName()))
-                            livrosEncontrados.add(ficheiro);
-                    } //if
-
-                    else if (ficheiro.isFile()) {
-                        if(temAExtencaoCorreta(ficheiro.getName()))
-                            livrosEncontrados.addAll(filesAtDir(ficheiro.getAbsolutePath()));
-                    } //else if
-                } //for
-            } //if
-        }
-        return livrosEncontrados;
-    } //filesAtDir
-
-    private static boolean temAExtencaoCorreta(String pNomeDoFicheiro){
-        String extencaoFicheiro = pNomeDoFicheiro.substring(
-                pNomeDoFicheiro.length() - EXTENCAO.length()
-        );
-        return EXTENCAO.compareToIgnoreCase(extencaoFicheiro) == 0;
-    } //temAExtencaoCorreta
-
-    //TODO: Este método só poderá começar a ser implementado depois de eu terminar a minha parte (sorry)
-    public static ArrayList<Livro> pesquisaDeLivros(){
-        ArrayList<Livro> livrosQueCoincidemComAPesquisa = new ArrayList<Livro>();
+    ///////////// INICIO PESQUISA DE LIVROS E AFINS /////////////
+    public static ArrayList<MyLivro> pesquisaDeLivros() {
+        ArrayList<MyLivro> livrosQueCoincidemComAPesquisa = new ArrayList<MyLivro>();
         ArrayList<File> todosOsLivrosExistentes = getAllLivros();
         return livrosQueCoincidemComAPesquisa;
     } //pesquisaDeLivros
 
+    public static void getAllLivrosInDirectory(String nomeDoDiretorio, ArrayList<File> listaDeLivros) {
+        File directory = new File(nomeDoDiretorio);
+        File[] fList = directory.listFiles();
+        if (fList != null)
+            for (File file : fList)
+                if (file.isFile()) {
+                    if (temAExtencaoCorreta(file.getName()))
+                        listaDeLivros.add(file);
+                } else if (file.isDirectory())
+                    getAllLivrosInDirectory(file.getAbsolutePath(), listaDeLivros);
+    } //getAllLivrosInDirectory
 
-    public static Livro FileToLivro(File livro){
-        return null;
-    } //FileToLivro
+    public static ArrayList<File> getAllLivros() {
+        String diretorio = Environment.getExternalStoragePublicDirectory("").getPath();
+
+        //TODO: procurar tanto no sdCard, como na memória interna
+        //Atualmente só procuro na memória interna
+
+        ArrayList<File> ficheirosQueSaoLivros = new ArrayList<File>();
+        getAllLivrosInDirectory(diretorio, ficheirosQueSaoLivros);
+
+        return ficheirosQueSaoLivros;
+    } //getAllLivros
+
+    ///////////// FIM PESQUISA DE LIVROS E AFINS /////////////
+
+
+    ///////////// INICIO DESCOMPRESSORES /////////////
+    public static void unzip(String fullPathDoLivro, String destinoDosFicheirosUnzipped) {
+        try {
+            FileInputStream fin = new FileInputStream(fullPathDoLivro);
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = null;
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.isDirectory())
+                    criaDiretorio(destinoDosFicheirosUnzipped, ze.getName());
+                else {
+                    FileOutputStream fout = new FileOutputStream(destinoDosFicheirosUnzipped + ze.getName());
+                    for (int i = zin.read(); i != -1; i = zin.read())
+                        fout.write(i);
+
+                    zin.closeEntry();
+                    fout.close();
+                } //else
+            } //while
+            zin.close();
+        } catch (Exception e) {
+            Log.e("@AmFiles unzip", e.toString());
+        } //catch
+    } //unzip
+
+    ///////////// FIM DESCOMPRESSORES /////////////
+
+
+    ///////////// INICIO AUXILIARES /////////////
+    private static boolean temAExtencaoCorreta(String pNomeDoFicheiro) {
+        return pNomeDoFicheiro.toUpperCase().endsWith(EXTENCAO);
+    } //temAExtencaoCorreta
+
+    private static void criaDiretorio(String destino, String novoDiretorio) {
+        File f = new File(destino + novoDiretorio);
+        if (!f.isDirectory())
+            f.mkdirs();
+    } //criaDiretorio
+
+    ///////////// FIM PESQUISA DE LIVROS E AFINS /////////////
+
 
 } //AmFiles

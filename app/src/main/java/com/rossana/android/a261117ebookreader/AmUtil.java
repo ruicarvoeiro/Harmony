@@ -21,7 +21,7 @@ public class AmUtil {
     /////// INICIO PARTE DADA PELO STOR \\\\\\
     public AmUtil(Activity pA, int pAppRequestCode) {
         this.mActivity = pA;
-    }//AmUtil
+    } //AmUtil
 
     public AmUtil(Activity pA) {
         this.mActivity = pA;
@@ -38,7 +38,7 @@ public class AmUtil {
     } //utilPopularSpinnerComOpcoes
 
 
-    public void utilFeedback (final String msg){
+    public void utilFeedback(final String msg) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -63,10 +63,10 @@ public class AmUtil {
                 (iCheckPermissionResult == PackageManager.PERMISSION_GRANTED);
 
         return bHasPermission;
-    }//utilCheckPermission
+    } //utilCheckPermission
 
     //--------------------------------------------------------------------------------------------------------------
-    public boolean utilModernRequestPermission(String strPermissionToAsk, int pAppRequestCode, Boolean bShowToast){
+    public boolean utilModernRequestPermission(String strPermissionToAsk, int pAppRequestCode, Boolean bShowToast) {
         boolean bHasPermission = utilCheckPermission(strPermissionToAsk);
 
         if (!bHasPermission) {
@@ -83,7 +83,7 @@ public class AmUtil {
                 }
                 return true;
             }//try
-            catch (Exception e){
+            catch (Exception e) {
                 if (bShowToast) {
                     utilFeedback(strPermissionToAsk + " NOT GRANTED!");
                 }
@@ -96,7 +96,7 @@ public class AmUtil {
     public HashMap<String, Boolean> utilModernRequestPermissions(String[] straPermissionsToAsk, int pAppRequestCode, Boolean bShowToast) {
         HashMap<String, Boolean> ret = new HashMap<>();
 
-        for(String strPermission : straPermissionsToAsk){
+        for (String strPermission : straPermissionsToAsk) {
             Boolean requestResult =
                     utilModernRequestPermission(
                             strPermission,
@@ -111,11 +111,10 @@ public class AmUtil {
     public Boolean utilCheckSupportedIntent(Intent pIntent) {
         PackageManager pm = mActivity.getPackageManager();
         Boolean bThereIsAtLeastOneAppCapableOfRespondingToTheIntent =
-                pIntent.resolveActivity(pm)!= null;
+                pIntent.resolveActivity(pm) != null;
 
         return bThereIsAtLeastOneAppCapableOfRespondingToTheIntent;
     } //utilCheckSupportedIntent
 
     /////// FIM PARTE DADA PELO STOR \\\\\\
-
 } //AmUtil
