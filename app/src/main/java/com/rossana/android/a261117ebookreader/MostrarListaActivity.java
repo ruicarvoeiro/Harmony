@@ -41,7 +41,7 @@ public class MostrarListaActivity extends AppCompatActivity {
 
     void init(Bundle savedInstanceState) {
         //Initializar variaveis da classe
-        mFiles = new AmFiles();
+        mFiles = new AmFiles(this);
         mUtil = new AmUtil(this);
 
         mLivros = new ArrayList<MyLivro>();
@@ -58,11 +58,13 @@ public class MostrarListaActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MyLivro l = mLivros.get(position);
                 l.getContent();
+                mUtil.utilFeedback("Livro " + l.getTitulo() + " descomprimido");
             } //onItemClick
         }; //mItemClickHandler
 
         //Biding dos objetos aos handlers
         mLvLivros.setOnItemClickListener(mItemClickHandler);
+        mLivroAdapter.notifyDataSetChanged();
     } //init
 
     void recuperarDados(Intent pPacoteComOsDados) {
@@ -73,7 +75,7 @@ public class MostrarListaActivity extends AppCompatActivity {
             if (livrosRecebidos != null) {
                 mLivros.clear();
                 for (File livro : livrosRecebidos)
-                    mLivros.add(new MyLivro(livro));
+                    mLivros.add(new MyLivro(this, livro));
             } //if
         } //if
     } //recuperarDados

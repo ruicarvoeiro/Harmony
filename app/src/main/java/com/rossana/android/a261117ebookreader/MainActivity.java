@@ -59,8 +59,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int iQuemFoiClicked = v.getId();
-                if (iQuemFoiClicked == R.id.idBtnOkPesquisa)
-                    sendResultadoPesquisa(mEtTiulo.getText().toString(), mEtAutor.toString(), mSpinner.getSelectedItem());
+                if (iQuemFoiClicked == R.id.idBtnOkPesquisa) {
+                    String tituloPedido = mEtTiulo.getText().toString();
+                    String autorPedido = mEtAutor.toString();
+                    String temaPedido = mListaDeGeneros[(mSpinner.getSelectedItemPosition())];
+                    sendResultadoPesquisa(tituloPedido, autorPedido, temaPedido);
+                } //if
                 if (iQuemFoiClicked == R.id.idBtnFavoritos)
                     sendFavoritos();
                 if (iQuemFoiClicked == R.id.idBtnRecentes)
@@ -85,13 +89,11 @@ public class MainActivity extends AppCompatActivity {
     } //sendFavoritos
 
     //TODO
-    private void sendResultadoPesquisa(String pStrTitulo, String pStrAutor, Object itemSelecionado) {
+    private void sendResultadoPesquisa(String pStrTitulo, String pStrAutor, String itemSelecionado) {
         sendListaDeLivros(mFiles.getAllLivros());
     } //sendResultadoPesquisa
 
     private void sendListaDeLivros(ArrayList<File> pArrayLivros) {
-        for (File f : pArrayLivros)
-            mUtil.utilFeedback(f.getName());
         Intent intent = new Intent(this, MostrarListaActivity.class);
         intent.putExtra(ARRAY_LIVROS, pArrayLivros);
         startActivity(intent);

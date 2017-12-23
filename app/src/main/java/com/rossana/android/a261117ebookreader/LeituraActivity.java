@@ -28,7 +28,7 @@ public class LeituraActivity extends Activity {
     void init(Bundle saveState) {
         //Initializar variaveis
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
-        mWvZonaLeitura = (WebView) findViewById(R.id.idWvMyBrowser);
+        mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
 
     } //init
 
@@ -38,6 +38,7 @@ public class LeituraActivity extends Activity {
         MenuInflater helper = this.getMenuInflater();
         helper.inflate(R.menu.leitura_menu, pMenu);
         return super.onCreateOptionsMenu(pMenu);
+
     } //onCreateOptionsMenu
 
     @Override

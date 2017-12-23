@@ -1,11 +1,15 @@
 package com.rossana.android.a261117ebookreader;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -15,29 +19,24 @@ import java.util.zip.ZipInputStream;
  */
 
 public class AmFiles {
+
+    public AmFiles(Activity a){
+        this.mContext = a;
+    }
+
     //Constantes
     public static final String EXTENCAO = ".MACOAS";
 
-    //Objetos
-    //private Activity mActivity;
-    //private AmUtil mUtil;
-
-    //Construtor
-    /*public AmFiles(Activity pA) {
-        this.mActivity = pA;
-        this.mUtil = new AmUtil(pA);
-    }//AmUtil*/
-
-    public AmFiles(){} //AmFiles
+    private Context mContext;
 
     ///////////// INICIO PESQUISA DE LIVROS E AFINS /////////////
-    public static ArrayList<MyLivro> pesquisaDeLivros() {
+    public ArrayList<MyLivro> pesquisaDeLivros(String pStrTitulo, String pStrAutor, Object pitemSelecionado) {
         ArrayList<MyLivro> livrosQueCoincidemComAPesquisa = new ArrayList<MyLivro>();
         ArrayList<File> todosOsLivrosExistentes = getAllLivros();
         return livrosQueCoincidemComAPesquisa;
     } //pesquisaDeLivros
 
-    public static void getAllLivrosInDirectory(String nomeDoDiretorio, ArrayList<File> listaDeLivros) {
+    public void getAllLivrosInDirectory(String nomeDoDiretorio, ArrayList<File> listaDeLivros) {
         File directory = new File(nomeDoDiretorio);
         File[] fList = directory.listFiles();
         if (fList != null)
@@ -49,7 +48,7 @@ public class AmFiles {
                     getAllLivrosInDirectory(file.getAbsolutePath(), listaDeLivros);
     } //getAllLivrosInDirectory
 
-    public static ArrayList<File> getAllLivros() {
+    public ArrayList<File> getAllLivros() {
         String diretorio = Environment.getExternalStoragePublicDirectory("").getPath();
 
         //TODO: procurar tanto no sdCard, como na memória interna
@@ -65,28 +64,81 @@ public class AmFiles {
 
 
     ///////////// INICIO DESCOMPRESSORES /////////////
-    public static void unzip(String fullPathDoLivro, String destinoDosFicheirosUnzipped) {
+    public boolean unzip(MyLivro livro, String fullPathDoLivro) {
         try {
             FileInputStream fin = new FileInputStream(fullPathDoLivro);
             ZipInputStream zin = new ZipInputStream(fin);
-            ZipEntry ze = null;
+            ZipEntry ze;
+
+            int numeroDaPagina = 0;
+
             while ((ze = zin.getNextEntry()) != null) {
-                if (ze.isDirectory())
-                    criaDiretorio(destinoDosFicheirosUnzipped, ze.getName());
+                String nomeDoFicheiroOuDiretorio = ze.getName();
+
+                if (ze.isDirectory()){
+                    File novaPasta = new File(mContext.getFilesDir(), nomeDoFicheiroOuDiretorio);
+                    novaPasta.mkdirs();
+                } //if
+
                 else {
-                    FileOutputStream fout = new FileOutputStream(destinoDosFicheirosUnzipped + ze.getName());
-                    for (int i = zin.read(); i != -1; i = zin.read())
-                        fout.write(i);
+                    OutputStream fout = new FileOutputStream(new File(mContext.getFilesDir(), ze.getName()), true);
+
+                    //OutputStreamWriter osw = new OutputStreamWriter(fout, "UTF-8");
+                    //InputStreamReader isr = new InputStreamReader(zin, "UTF-8");
+
+                    byte[] buffer = new byte[2048];
+                    BufferedOutputStream bos = new BufferedOutputStream(fout, buffer.length);
+
+                    int valor;
+                    String texto = "";
+                    //while ((valor = zin.read(buffer, 0, buffer.length)) != -1) {
+                    if(ze.getName().endsWith(".html") || ze.getName().endsWith("META_INFO"))
+                        while ((valor = zin.read(buffer)) != -1) {
+                            bos.write(buffer, 0, valor);
+                            texto += new String(buffer, "UTF-8");
+                        }
+                    else
+                        while ((valor = zin.read(buffer)) != -1)
+                            bos.write(buffer, 0, valor);
+
+
+
+                    if(ze.getName().endsWith(".html"))
+                        livro.addPagina(texto, numeroDaPagina++);
+
+                    if(ze.getName().endsWith("META_INFO"))
+                        livro.addMetadata(texto);
+
+                    bos.flush();
+                    bos.close();
+
+                    fout.flush();
+                    fout.close();
+                    zin.closeEntry();
+
+                    /*int i;
+                    while ((i = isr.read()) != -1)
+                        osw.write((char) i);
 
                     zin.closeEntry();
                     fout.close();
+                    */
                 } //else
             } //while
+
             zin.close();
+            return true;
         } catch (Exception e) {
             Log.e("@AmFiles unzip", e.toString());
         } //catch
+        return false;
     } //unzip
+
+
+    private static boolean verificaSeOFicheiroJaExiste(String path) {
+        File file = new File(path);
+        return file.exists();
+    } //verificaSeOFicheiroJaExiste
 
     ///////////// FIM DESCOMPRESSORES /////////////
 
@@ -96,13 +148,6 @@ public class AmFiles {
         return pNomeDoFicheiro.toUpperCase().endsWith(EXTENCAO);
     } //temAExtencaoCorreta
 
-    private static void criaDiretorio(String destino, String novoDiretorio) {
-        File f = new File(destino + novoDiretorio);
-        if (!f.isDirectory())
-            f.mkdirs();
-    } //criaDiretorio
-
     ///////////// FIM PESQUISA DE LIVROS E AFINS /////////////
-
 
 } //AmFiles
