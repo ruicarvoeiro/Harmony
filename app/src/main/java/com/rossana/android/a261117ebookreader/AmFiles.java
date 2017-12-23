@@ -9,6 +9,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
@@ -59,7 +60,6 @@ public class AmFiles {
 
         return ficheirosQueSaoLivros;
     } //getAllLivros
-
     ///////////// FIM PESQUISA DE LIVROS E AFINS /////////////
 
 
@@ -83,20 +83,19 @@ public class AmFiles {
                 else {
                     OutputStream fout = new FileOutputStream(new File(mContext.getFilesDir(), ze.getName()), true);
 
-                    //OutputStreamWriter osw = new OutputStreamWriter(fout, "UTF-8");
-                    //InputStreamReader isr = new InputStreamReader(zin, "UTF-8");
-
                     byte[] buffer = new byte[2048];
                     BufferedOutputStream bos = new BufferedOutputStream(fout, buffer.length);
 
                     int valor;
                     String texto = "";
                     //while ((valor = zin.read(buffer, 0, buffer.length)) != -1) {
-                    if(ze.getName().endsWith(".html") || ze.getName().endsWith("META_INFO"))
+                    if(ze.getName().endsWith(".html") || ze.getName().endsWith("META_INFO")) {
                         while ((valor = zin.read(buffer)) != -1) {
                             bos.write(buffer, 0, valor);
                             texto += new String(buffer, "UTF-8");
+                            buffer = new byte[2048];
                         }
+                    }
                     else
                         while ((valor = zin.read(buffer)) != -1)
                             bos.write(buffer, 0, valor);
@@ -115,14 +114,6 @@ public class AmFiles {
                     fout.flush();
                     fout.close();
                     zin.closeEntry();
-
-                    /*int i;
-                    while ((i = isr.read()) != -1)
-                        osw.write((char) i);
-
-                    zin.closeEntry();
-                    fout.close();
-                    */
                 } //else
             } //while
 
@@ -134,20 +125,49 @@ public class AmFiles {
         return false;
     } //unzip
 
+    ///////////// FIM DESCOMPRESSORES /////////////
 
-    private static boolean verificaSeOFicheiroJaExiste(String path) {
+
+    ///////////// INICIO LEITURA DE FICHEIROS /////////////
+    public String getTextoFromFicheiro(String pathDoFicheiro) {
+        String strRet = "";
+        try {
+            FileInputStream fr = new FileInputStream(new File(mContext.getFilesDir(), pathDoFicheiro));
+            InputStreamReader isr = new InputStreamReader(fr, "UTF-8");
+
+            if(isr != null){
+                int i;
+                while((i = isr.read()) != -1)
+                    strRet += (char) i;
+            }
+
+            fr.close();
+            isr.close();
+        }catch(Exception e){
+            Log.e("HELP", e.toString());
+        }
+
+        return strRet;
+    } //getTextoFromFicheiro
+
+    ///////////// FIM LEITURA DE FICHEIROS /////////////
+
+
+    ///////////// INICIO AUXILIARES /////////////
+    public static boolean temAExtencaoCorreta(String pNomeDoFicheiro) {
+        return pNomeDoFicheiro.toUpperCase().endsWith(EXTENCAO);
+    } //temAExtencaoCorreta
+
+    public  static boolean ficheiroJaExiste(String path) {
         File file = new File(path);
         return file.exists();
     } //verificaSeOFicheiroJaExiste
 
-    ///////////// FIM DESCOMPRESSORES /////////////
+    public boolean pastaJaExiste(String nomeDoDiretorio) {
+        File novaPasta = new File(mContext.getFilesDir(), nomeDoDiretorio);
+        return novaPasta.exists();
+    } //pastaJaExiste
 
-
-    ///////////// INICIO AUXILIARES /////////////
-    private static boolean temAExtencaoCorreta(String pNomeDoFicheiro) {
-        return pNomeDoFicheiro.toUpperCase().endsWith(EXTENCAO);
-    } //temAExtencaoCorreta
-
-    ///////////// FIM PESQUISA DE LIVROS E AFINS /////////////
+    ///////////// FIM AUXILIARES /////////////
 
 } //AmFiles
