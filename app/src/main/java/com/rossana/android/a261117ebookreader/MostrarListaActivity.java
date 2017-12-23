@@ -15,6 +15,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MostrarListaActivity extends AppCompatActivity {
+    //Constantes
+    public final static String PAGINAS = "PAGINAS";
+    public final static String NOME_DO_LIVRO = "NOME_DO_LIVRO";
+
     //Elementos do XML
     private ListView mLvLivros;
 
@@ -57,8 +61,8 @@ public class MostrarListaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MyLivro l = mLivros.get(position);
-                l.getContent();
-                mUtil.utilFeedback("Livro " + l.getTitulo() + " descomprimido");
+                mUtil.utilFeedback("A abrir livro " + l.getTitulo());
+                sendLivroASerLido(l);
             } //onItemClick
         }; //mItemClickHandler
 
@@ -66,6 +70,14 @@ public class MostrarListaActivity extends AppCompatActivity {
         mLvLivros.setOnItemClickListener(mItemClickHandler);
         mLivroAdapter.notifyDataSetChanged();
     } //init
+
+
+    private void sendLivroASerLido(MyLivro livro) {
+        Intent intent = new Intent(this, LeituraActivity.class);
+        intent.putExtra(NOME_DO_LIVRO, livro.getTitulo());
+        intent.putExtra(PAGINAS, livro.getPaginas());
+        startActivity(intent);
+    } //sendListaDeLivros
 
     void recuperarDados(Intent pPacoteComOsDados) {
         if (pPacoteComOsDados != null) {
