@@ -18,6 +18,7 @@ public class MostrarListaActivity extends AppCompatActivity {
     //Constantes
     public final static String PAGINAS = "PAGINAS";
     public final static String NOME_DO_LIVRO = "NOME_DO_LIVRO";
+    public final static String PATH_DO_LIVRO = "PATH_DO_LIVRO";
 
     //Elementos do XML
     private ListView mLvLivros;
@@ -62,6 +63,7 @@ public class MostrarListaActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MyLivro l = mLivros.get(position);
                 mUtil.utilFeedback("A abrir livro " + l.getTitulo());
+                l.getContent();
                 sendLivroASerLido(l);
             } //onItemClick
         }; //mItemClickHandler
@@ -75,7 +77,10 @@ public class MostrarListaActivity extends AppCompatActivity {
     private void sendLivroASerLido(MyLivro livro) {
         Intent intent = new Intent(this, LeituraActivity.class);
         intent.putExtra(NOME_DO_LIVRO, livro.getTitulo());
+
         intent.putExtra(PAGINAS, livro.getPaginas());
+
+        intent.putExtra(PATH_DO_LIVRO, livro.getISBN());
         startActivity(intent);
     } //sendListaDeLivros
 

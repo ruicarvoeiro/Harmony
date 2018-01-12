@@ -23,6 +23,8 @@ public class LeituraActivity extends Activity {
     //Outros Objetos
     private Intent mIntentQueMeChamou;
     private ArrayList<String> mPaginas;
+    private AmSoundsFromLivro mMusic;
+    private String path;
 
     //Métodos
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +40,16 @@ public class LeituraActivity extends Activity {
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
         mPaginas = new ArrayList<String>();
         mIntentQueMeChamou = this.getIntent();
-
+        mMusic = new AmSoundsFromLivro(this);
         recuperarDados(mIntentQueMeChamou);
         displayPagina(0);
     } //init
 
     private void displayPagina(int i) {
+        mMusic.getMusicas(path);
         mWvZonaLeitura.loadData(mPaginas.get(i), "text/html", null);
-    }
-
+        mMusic.playMusicas(mPaginas.get(i));
+    } //displayPagina
 
     private void recuperarDados(Intent pPacoteComOsDados) {
         if (pPacoteComOsDados != null) {
@@ -56,9 +59,9 @@ public class LeituraActivity extends Activity {
             mPaginas = paginasDoLivro;
             String nomeDoLivro = pPacoteComOsDados.getStringExtra(MostrarListaActivity.NOME_DO_LIVRO);
             mTvNomeLivro.setText(nomeDoLivro);
+            path = pPacoteComOsDados.getStringExtra(MostrarListaActivity.PATH_DO_LIVRO);
             } //if
     } //recuperarDados
-
 
 
     //O que é esta parte?

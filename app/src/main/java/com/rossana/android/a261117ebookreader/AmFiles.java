@@ -100,8 +100,6 @@ public class AmFiles {
                         while ((valor = zin.read(buffer)) != -1)
                             bos.write(buffer, 0, valor);
 
-
-
                     if(ze.getName().endsWith(".html"))
                         livro.addPagina(texto, numeroDaPagina++);
 
@@ -119,6 +117,32 @@ public class AmFiles {
 
             zin.close();
             return true;
+        } catch (Exception e) {
+            Log.e("@AmFiles unzip", e.toString());
+        } //catch
+        return false;
+    } //unzip
+
+    public boolean getMetadata(MyLivro livro, String fullPathDoLivro) {
+        try {
+            FileInputStream fin = new FileInputStream(fullPathDoLivro);
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze;
+
+            while ((ze = zin.getNextEntry()) != null) {
+                if (!ze.isDirectory() && ze.getName().endsWith("META_INFO")) {
+                    byte[] buffer = new byte[2048];
+                    int valor;
+                    String texto = "";
+                    while ((valor = zin.read(buffer)) != -1) {
+                        texto += new String(buffer, "UTF-8");
+                        buffer = new byte[2048];
+                    }
+                    livro.addMetadata(texto);
+                    zin.closeEntry();
+                    return true;
+                }
+            }
         } catch (Exception e) {
             Log.e("@AmFiles unzip", e.toString());
         } //catch
@@ -158,7 +182,7 @@ public class AmFiles {
         return pNomeDoFicheiro.toUpperCase().endsWith(EXTENCAO);
     } //temAExtencaoCorreta
 
-    public  static boolean ficheiroJaExiste(String path) {
+    public static boolean ficheiroJaExiste(String path) {
         File file = new File(path);
         return file.exists();
     } //verificaSeOFicheiroJaExiste
@@ -168,6 +192,25 @@ public class AmFiles {
         return novaPasta.exists();
     } //pastaJaExiste
 
+    public static String getNomeFicheiro(String path){
+        String [] partes = path.split("/");
+        String nomeFicheiro = partes[partes.length - 1];
+        String[] nomeEExtencao = nomeFicheiro.split("\\.");
+        return nomeEExtencao[0];
+    } //getNomeFicheiro
+
+
+    public ArrayList getFicheirosNoDiretorio(String path){
+        File diretorio = new File(mContext.getFilesDir(), path);
+
+        ArrayList<String> listaDeFicheiros = new ArrayList<>();
+        if(diretorio.isDirectory())
+        for(File ficheiro : diretorio.listFiles())
+            listaDeFicheiros.add(ficheiro.getPath());
+//NIGGGA USE THIS PATH: IBAN/SOUNDS
+        //SLAAAAAAAAAY BITCH
+        return listaDeFicheiros;
+    }
     ///////////// FIM AUXILIARES /////////////
 
 } //AmFiles

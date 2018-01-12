@@ -1,3 +1,9 @@
+/*
+cd c:\Android\SDK\platform-tools
+adb shell
+run-as com.rossana.android.a261117ebookreader
+rm -r
+*/
 package com.rossana.android.a261117ebookreader;
 
 import android.content.Context;
