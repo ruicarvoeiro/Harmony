@@ -53,7 +53,6 @@ public class AmSoundPool {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
                 numeroDeSonsCarregados++;
-                int progresso = numeroDeSonsCarregados / listaDeFicheiros.size() * 100;
                 if(numeroDeSonsCarregados == listaDeFicheiros.size())
                     progress.dismiss();
             } //onLoadComplete

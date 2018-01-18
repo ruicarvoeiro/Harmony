@@ -51,12 +51,13 @@ public class AmFiles {
 
     public ArrayList<File> getAllLivros() {
         String diretorio = Environment.getExternalStoragePublicDirectory("").getPath();
-
-        //TODO: procurar tanto no sdCard, como na memória interna
-        //Atualmente só procuro na memória interna
-
         ArrayList<File> ficheirosQueSaoLivros = new ArrayList<File>();
         getAllLivrosInDirectory(diretorio, ficheirosQueSaoLivros);
+
+        File fileList[] = new File("/storage/").listFiles();
+        for (File file : fileList)
+            if(!file.getAbsolutePath().equalsIgnoreCase(Environment.getExternalStorageDirectory().getAbsolutePath()) && file.isDirectory() && file.canRead())
+                getAllLivrosInDirectory(file.getAbsolutePath(), ficheirosQueSaoLivros);
 
         return ficheirosQueSaoLivros;
     } //getAllLivros
@@ -214,3 +215,11 @@ public class AmFiles {
     ///////////// FIM AUXILIARES /////////////
 
 } //AmFiles
+
+
+
+/*
+* for(MyLivro livro : listaDeLivros)
+*
+* MyLivro livro = listaDeLivros.get(i);
+* */

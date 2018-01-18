@@ -57,7 +57,7 @@ public class AmSoundsFromLivro{
         // START NOME_DO_FICHEIRO NOREPEAT
         // START NOME_DO_FICHEIRO REPEAT
 
-        //Os comandos STPO divide-se em 2:
+        //Os comandos STOP divide-se em 2:
         // STOP NOME_DO_FICHEIRO
         // STOP ALL
 

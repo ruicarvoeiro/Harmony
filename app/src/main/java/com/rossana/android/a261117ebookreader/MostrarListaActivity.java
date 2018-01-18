@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class MostrarListaActivity extends AppCompatActivity {
@@ -86,14 +85,10 @@ public class MostrarListaActivity extends AppCompatActivity {
 
     void recuperarDados(Intent pPacoteComOsDados) {
         if (pPacoteComOsDados != null) {
-            ArrayList<File> livrosRecebidos = (ArrayList<File>)
+            ArrayList<MyLivro> livrosRecebidos = (ArrayList<MyLivro>)
                     pPacoteComOsDados.getSerializableExtra(MainActivity.ARRAY_LIVROS);
 
-            if (livrosRecebidos != null) {
-                mLivros.clear();
-                for (File livro : livrosRecebidos)
-                    mLivros.add(new MyLivro(this, livro));
-            } //if
+            mLivros = livrosRecebidos;
         } //if
     } //recuperarDados
 } //MostrarListaActivity

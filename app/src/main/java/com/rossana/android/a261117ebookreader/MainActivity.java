@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         mListaDeGeneros = getResources().getStringArray(R.array.nome_generos);
         mUtil.utilPopularSpinnerComOpcoes(mSpinner, mListaDeGeneros);
 
-
+        mUtil.utilModernRequestPermission("android.permission.STORAGE", 1, false);
         mClickHandler = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +96,23 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO
     private void sendResultadoPesquisa(String pStrTitulo, String pStrAutor, String itemSelecionado) {
-        sendListaDeLivros(mFiles.getAllLivros());
+        ArrayList<File> todosOsLivros = mFiles.getAllLivros();
+        ArrayList<MyLivro> mLivros = new ArrayList<>();
+        ArrayList<MyLivro> livrosAceites = new ArrayList<>();
+
+        for (File livro : todosOsLivros)
+            mLivros.add(new MyLivro(this, livro));
+
+        for(MyLivro livro : mLivros){
+            String tituloDoLivro = livro.getTitulo();
+            String autorDoLivro = livro.getAutor();
+            if(tituloDoLivro.contains(pStrTitulo) && autorDoLivro.contains(pStrAutor))
+                livrosAceites.add(livro);
+        } //for
+        sendListaDeLivros(livrosAceites);
     } //sendResultadoPesquisa
 
-    private void sendListaDeLivros(ArrayList<File> pArrayLivros) {
+    private void sendListaDeLivros(ArrayList<MyLivro> pArrayLivros) {
         Intent intent = new Intent(this, MostrarListaActivity.class);
         intent.putExtra(ARRAY_LIVROS, pArrayLivros);
         startActivity(intent);
