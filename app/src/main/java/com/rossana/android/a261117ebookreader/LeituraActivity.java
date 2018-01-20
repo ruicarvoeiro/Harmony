@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,9 +42,21 @@ public class LeituraActivity extends Activity {
         mPaginas = new ArrayList<String>();
         mIntentQueMeChamou = this.getIntent();
         mMusic = new AmSoundsFromLivro(this);
+        swipe();
         recuperarDados(mIntentQueMeChamou);
         displayPagina(0);
     } //init
+    private void swipe(){
+        mWvZonaLeitura.setOnTouchListener(new AmOnSwipeTouchListener(LeituraActivity.this) {
+            public void onSwipeRight() {
+                Toast.makeText(LeituraActivity.this, "right", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeLeft() {
+                Toast.makeText(LeituraActivity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
 
     private void displayPagina(int i) {
         mMusic.getMusicas(path);
