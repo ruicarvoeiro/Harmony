@@ -61,7 +61,7 @@ public class AmSoundPool {
 
     public void tocarSomEmLoop(String nome){
         int musicaATocar = listaDeSons.get(nome);
-        mSoundPool.play(musicaATocar, volume, volume, 0, -1, 1.0f);
+        mSoundPool.play(musicaATocar, volume, volume, 1, -1, 1.0f);
     } //tocarSomEmLoop
 
     public void tocarSom(String nome){

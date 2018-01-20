@@ -1,7 +1,7 @@
 package com.rossana.android.a261117ebookreader;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.view.View;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,14 +15,9 @@ public class AmSoundsFromLivro {
     private Activity mContext;
     private AmSoundPool mSoundPool;
     private AmFiles mFiles;
-    private ProgressDialog mSpinnerDeProgresso;
     private LeituraActivity mLeitura;
 
     public AmSoundsFromLivro(Activity mContext) {
-        this.mSpinnerDeProgresso = new ProgressDialog(mContext);
-        mSpinnerDeProgresso.setCancelable(false);
-        //mSpinnerDeProgresso.setMessage("Carregando");
-
         this.mContext = mContext;
         this.mSoundPool = new AmSoundPool(this);
         this.mFiles = new AmFiles(mContext);
@@ -30,7 +25,6 @@ public class AmSoundsFromLivro {
     } //AmSoundsFromLivro
 
     public void playMusicas(String strHTMLaApresentar) {
-        mSpinnerDeProgresso.show();
         String regexParaInicioComentario = "(<!--)";
         String regexParaFimComentario = "(-->)";
         String regexParaConteudo = ".+";
@@ -58,7 +52,7 @@ public class AmSoundsFromLivro {
         mSoundPool.carregarSons(mFiles.getFicheirosNoDiretorio(path + "/sounds"), mContext);
     }
 
-    public boolean executarComando(String comando, int tempo) {
+    public void executarComando(String comando, int tempo) {
         //Existem 2 tipos de comandos:
         //1) Start
         //2) Stop
@@ -104,11 +98,6 @@ public class AmSoundsFromLivro {
             else
                 mSoundPool.pararSom(nomeDoFicheiro);
         } //else if
-
-        else
-            return false;
-
-        return true;
     } //executarComando
 
     public int getTempo(int carateresAtePosicao, String texto) {
@@ -118,10 +107,13 @@ public class AmSoundsFromLivro {
     } //getTempo
 
     public void musicasCarregadas(){
-        mSpinnerDeProgresso.hide();
-        mSpinnerDeProgresso.dismiss();
+        View progressBar = mContext.findViewById(R.id.idPBCarregarLivro);
+        View webView = mContext.findViewById(R.id.idWvZonaLeitura);
+        if(progressBar != null)
+            progressBar.setVisibility(View.GONE);
 
+        if(webView != null)
+            webView.setVisibility(View.VISIBLE);
         mLeitura.displayPagina();
     } //musicasCarregadas
-
 } //AmSoundsFromLivro

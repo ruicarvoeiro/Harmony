@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.io.File;
@@ -23,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
     public final static String KEY_ARRAY_LIVROS = "KEY_ARRAY_LIVROS";
 
     //Objetos da Classe
-    Context mContext;
+    private Context mContext;
 
     //Objetos do XML
     private EditText mEtTiulo, mEtAutor;
     private Spinner mSpinner;
     private Button mBtnOkPesquisa, mBtnFavoritos, mBtnRecentes;
-
+    private ProgressBar mPBCarregarListaDeLivros;
     //Handlers
     private View.OnClickListener mClickHandler;
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         mBtnOkPesquisa = (Button) findViewById(R.id.idBtnOkPesquisa);
         mBtnFavoritos = (Button) findViewById(R.id.idBtnFavoritos);
         mBtnRecentes = (Button) findViewById(R.id.idBtnRecentes);
+        mPBCarregarListaDeLivros = (ProgressBar) findViewById(R.id.idPBCarregarListaDeLivros);
+        mPBCarregarListaDeLivros.setVisibility(View.GONE);
 
         mUtil = new AmUtil(this);
         mFiles = new AmFiles(this);
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int iQuemFoiClicked = v.getId();
+                mPBCarregarListaDeLivros.setVisibility(View.VISIBLE);
+
                 if (iQuemFoiClicked == R.id.idBtnOkPesquisa) {
                     String tituloPedido = mEtTiulo.getText().toString();
                     String autorPedido = mEtAutor.toString();

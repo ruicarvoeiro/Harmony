@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class LeituraActivity extends Activity {
     //Objetos do XML
     private TextView mTvNomeLivro;
     private WebView mWvZonaLeitura;
+    private ProgressBar mSpinnerDeProgresso;
 
     //Outros Objetos
     private Intent mIntentQueMeChamou;
@@ -38,6 +40,7 @@ public class LeituraActivity extends Activity {
         //Initializar variaveis
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
+        mSpinnerDeProgresso = (ProgressBar) findViewById(R.id.idPBCarregarLivro);
         mPaginas = new ArrayList<String>();
         mMusic = new AmSoundsFromLivro(this);
         mIntentQueMeChamou = this.getIntent();
