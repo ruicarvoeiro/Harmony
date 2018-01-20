@@ -1,26 +1,36 @@
 package com.rossana.android.a261117ebookreader;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 /**
  * Created by some bitch on 04/01/2018.
  */
 
-public class AmSoundsFromLivro{
+public class AmSoundsFromLivro {
     private Activity mContext;
     private AmSoundPool mSoundPool;
     private AmFiles mFiles;
+    private ProgressDialog mSpinnerDeProgresso;
+    private LeituraActivity mLeitura;
 
     public AmSoundsFromLivro(Activity mContext) {
+        this.mSpinnerDeProgresso = new ProgressDialog(mContext);
+        mSpinnerDeProgresso.setCancelable(false);
+        //mSpinnerDeProgresso.setMessage("Carregando");
+
         this.mContext = mContext;
-        this.mSoundPool = new AmSoundPool();
+        this.mSoundPool = new AmSoundPool(this);
         this.mFiles = new AmFiles(mContext);
+        this.mLeitura = (LeituraActivity) mContext;
     } //AmSoundsFromLivro
 
     public void playMusicas(String strHTMLaApresentar) {
+        mSpinnerDeProgresso.show();
         String regexParaInicioComentario = "(<!--)";
         String regexParaFimComentario = "(-->)";
         String regexParaConteudo = ".+";
@@ -40,7 +50,6 @@ public class AmSoundsFromLivro{
             comandoLimpo.trim();
 
             int tempo = getTempo(contagemDeCarateres, comandoLimpo);
-
             executarComando(comandoLimpo, tempo);
         } //while
     } //playMusicas
@@ -107,5 +116,12 @@ public class AmSoundsFromLivro{
         int numeroDePalavras = textoAnalisar.split(" ").length - 1;
         return Math.round(numeroDePalavras * 1000 * (250 / 60));
     } //getTempo
+
+    public void musicasCarregadas(){
+        mSpinnerDeProgresso.hide();
+        mSpinnerDeProgresso.dismiss();
+
+        mLeitura.displayPagina();
+    } //musicasCarregadas
 
 } //AmSoundsFromLivro

@@ -31,32 +31,35 @@ public class AmFiles {
     private Context mContext;
 
     ///////////// INICIO PESQUISA DE LIVROS E AFINS /////////////
-    public ArrayList<MyLivro> pesquisaDeLivros(String pStrTitulo, String pStrAutor, Object pitemSelecionado) {
-        ArrayList<MyLivro> livrosQueCoincidemComAPesquisa = new ArrayList<MyLivro>();
-        ArrayList<File> todosOsLivrosExistentes = getAllLivros();
-        return livrosQueCoincidemComAPesquisa;
-    } //pesquisaDeLivros
-
     public void getAllLivrosInDirectory(String nomeDoDiretorio, ArrayList<File> listaDeLivros) {
         File directory = new File(nomeDoDiretorio);
         File[] fList = directory.listFiles();
         if (fList != null)
             for (File file : fList)
                 if (file.isFile()) {
-                    if (temAExtencaoCorreta(file.getName()))
+                    if (temAExtencaoCorreta(file.getName())  && !arrayListContemLivro(listaDeLivros, file))
                         listaDeLivros.add(file);
                 } else if (file.isDirectory())
                     getAllLivrosInDirectory(file.getAbsolutePath(), listaDeLivros);
     } //getAllLivrosInDirectory
 
+    private boolean arrayListContemLivro(ArrayList<File> fList, File file) {
+        for (File fListFile : fList)
+            if(fListFile.equals(file))
+                return true;
+        return false;
+    }
+
     public ArrayList<File> getAllLivros() {
         String diretorio = Environment.getExternalStoragePublicDirectory("").getPath();
+
         ArrayList<File> ficheirosQueSaoLivros = new ArrayList<File>();
         getAllLivrosInDirectory(diretorio, ficheirosQueSaoLivros);
 
         File fileList[] = new File("/storage/").listFiles();
         for (File file : fileList)
             if(!file.getAbsolutePath().equalsIgnoreCase(Environment.getExternalStorageDirectory().getAbsolutePath()) && file.isDirectory() && file.canRead())
+            //if(file.isDirectory() && file.canRead())
                 getAllLivrosInDirectory(file.getAbsolutePath(), ficheirosQueSaoLivros);
 
         return ficheirosQueSaoLivros;
@@ -65,9 +68,9 @@ public class AmFiles {
 
 
     ///////////// INICIO DESCOMPRESSORES /////////////
-    public boolean unzip(MyLivro livro, String fullPathDoLivro) {
+    public boolean unzip(MyLivro livro) {
         try {
-            FileInputStream fin = new FileInputStream(fullPathDoLivro);
+            FileInputStream fin = new FileInputStream(livro.getFile());
             ZipInputStream zin = new ZipInputStream(fin);
             ZipEntry ze;
 
@@ -142,8 +145,8 @@ public class AmFiles {
                     livro.addMetadata(texto);
                     zin.closeEntry();
                     return true;
-                }
-            }
+                } //if
+            } //while
         } catch (Exception e) {
             Log.e("@AmFiles unzip", e.toString());
         } //catch
@@ -171,7 +174,6 @@ public class AmFiles {
         }catch(Exception e){
             Log.e("HELP", e.toString());
         }
-
         return strRet;
     } //getTextoFromFicheiro
 
@@ -205,21 +207,66 @@ public class AmFiles {
         File diretorio = new File(mContext.getFilesDir(), path);
 
         ArrayList<String> listaDeFicheiros = new ArrayList<>();
-        if(diretorio.isDirectory())
-        for(File ficheiro : diretorio.listFiles())
-            listaDeFicheiros.add(ficheiro.getPath());
-//NIGGGA USE THIS PATH: IBAN/SOUNDS
-        //SLAAAAAAAAAY BITCH
+        if (diretorio.isDirectory())
+            for (File ficheiro : diretorio.listFiles())
+                listaDeFicheiros.add(ficheiro.getPath());
         return listaDeFicheiros;
-    }
+    } //getFicheirosNoDiretorio
     ///////////// FIM AUXILIARES /////////////
 
+
+    ///////////// PREENCHER LIVRO /////////////
+
+    public void getConteudos(MyLivro mLivro) {
+        try {
+            String path = mLivro.getISBN();
+            FileInputStream fin = new FileInputStream(mLivro.getFile());
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = zin.getNextEntry();
+
+            String nomeDoDiretorio = ze.getName().split("/")[0];
+            zin.close();
+            fin.close();
+
+            if (pastaJaExiste(nomeDoDiretorio))
+                preencherLivro(nomeDoDiretorio, mLivro);
+            else
+                unzip(mLivro);
+        }catch (Exception e){
+            e.toString();
+        } //catch
+    } //getConteudos
+
+    private void preencherLivro(String nomeDoDiretorio, MyLivro mLivro) {
+        String metadata = getTextoFromFicheiro(nomeDoDiretorio + "/META_INFO");
+        mLivro.addMetadata(metadata);
+
+        File diretorioComOsFicheiros = new File(mContext.getFilesDir(), nomeDoDiretorio + "/1/");
+        for(File ficheiro : diretorioComOsFicheiros.listFiles())
+            mLivro.addPagina(getTextoFromFicheiro(nomeDoDiretorio + "/1/" + ficheiro.getName()),
+                    mLivro.getPaginas().size());
+    } //preencherLivro
+
+    public void getBasicData(MyLivro mLivro){
+        String path = mLivro.getFile().getPath();
+        try {
+            FileInputStream fin = new FileInputStream(path);
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = zin.getNextEntry();
+
+            String nomeDoDiretorio = ze.getName().split("/")[0];
+            zin.close();
+            fin.close();
+
+            if (pastaJaExiste(nomeDoDiretorio))
+                preencherLivro(nomeDoDiretorio, mLivro);
+            else
+                getMetadata(mLivro, path);
+        }catch (Exception e){
+            e.toString();
+        } //catch
+    } //getBasicData
+
+    ///////////// FIM PREENCHER LIVRO /////////////
+
 } //AmFiles
-
-
-
-/*
-* for(MyLivro livro : listaDeLivros)
-*
-* MyLivro livro = listaDeLivros.get(i);
-* */

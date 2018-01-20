@@ -62,7 +62,7 @@ public class MostrarListaActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MyLivro l = mLivros.get(position);
                 mUtil.utilFeedback("A abrir livro " + l.getTitulo());
-                l.getContent();
+                mFiles.getConteudos(l);
                 sendLivroASerLido(l);
             } //onItemClick
         }; //mItemClickHandler
@@ -85,9 +85,9 @@ public class MostrarListaActivity extends AppCompatActivity {
 
     void recuperarDados(Intent pPacoteComOsDados) {
         if (pPacoteComOsDados != null) {
+            boolean temAKey = pPacoteComOsDados.hasExtra(MainActivity.KEY_ARRAY_LIVROS);
             ArrayList<MyLivro> livrosRecebidos = (ArrayList<MyLivro>)
-                    pPacoteComOsDados.getSerializableExtra(MainActivity.ARRAY_LIVROS);
-
+                    pPacoteComOsDados.getSerializableExtra(MainActivity.KEY_ARRAY_LIVROS);
             mLivros = livrosRecebidos;
         } //if
     } //recuperarDados

@@ -1,6 +1,5 @@
 package com.rossana.android.a261117ebookreader;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -18,29 +17,30 @@ public class AmSoundPool {
     private HashMap<String, Integer> listaDeSons;
     private float volume; //0 a 1
     private int numeroDeSonsCarregados = 0;
-    private ProgressDialog progress;
     private Context mContext;
+    private AmSoundsFromLivro mSoundsFromLivro;
 
-    public AmSoundPool(ArrayList<String> listaDeFicheiros, float volume, Context context){
+    public AmSoundPool(ArrayList<String> listaDeFicheiros, float volume, Context context, AmSoundsFromLivro amSoundsFromLivro){
+        this();
+        mSoundsFromLivro = amSoundsFromLivro;
         mContext = context;
         carregarSons(listaDeFicheiros, context);
         this.volume = volume;
     } //AmSoundPool
 
+    public AmSoundPool(AmSoundsFromLivro amSoundsFromLivro){
+        this();
+        mSoundsFromLivro = amSoundsFromLivro;
+    } //AmSoundPool
+
     public AmSoundPool(){
-        volume = 0.5f;
+        volume = 1f;
     }
 
 
     public void carregarSons(final ArrayList<String> listaDeFicheiros, final Context context){
         listaDeSons = new HashMap<>();
         mSoundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
-        progress = new ProgressDialog(context);
-        progress.setMessage("Loading awesomeness");
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
 
         for(String path : listaDeFicheiros) {
             String nome = AmFiles.getNomeFicheiro(path);
@@ -53,8 +53,8 @@ public class AmSoundPool {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
                 numeroDeSonsCarregados++;
-                if(numeroDeSonsCarregados == listaDeFicheiros.size())
-                    progress.dismiss();
+                if(numeroDeSonsCarregados == listaDeFicheiros.size() && mSoundsFromLivro != null)
+                    mSoundsFromLivro.musicasCarregadas();
             } //onLoadComplete
         }); //mSoundPool.setOnLoadCompleteListener
     } //carregarSons
@@ -102,6 +102,5 @@ public class AmSoundPool {
             } //run
         }, milissegundos);
     } //tocarSomDepoisDeMilissegundosEmLoop
-
 
 } //AmSoundPool

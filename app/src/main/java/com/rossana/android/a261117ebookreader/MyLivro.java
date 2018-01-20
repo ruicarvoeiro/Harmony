@@ -1,18 +1,14 @@
 package com.rossana.android.a261117ebookreader;
 
-import android.app.Activity;
-
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * Created by some bitch on 16/12/2017.
  */
 
-public class MyLivro {
+public class MyLivro implements Serializable {
     //Variaveis da classe
     private String mTitulo;
     private String mAutor;
@@ -25,17 +21,13 @@ public class MyLivro {
     private int mAno;
 
     //Outros objetos
-    private AmFiles mFiles;
-    private Activity mActivity;
+    //private AmFiles mFiles;
+    //private Activity mActivity;
 
     //Construtores
-    public MyLivro(Activity mActivity, File file) {
+    public MyLivro(File file) {
         this.mFicheiro = file;
-        this.mActivity = mActivity;
         mPaginas = new ArrayList<String>();
-        mFiles = new AmFiles(mActivity);
-
-        getBasicData();
     } //MyLivro
 
     //Acessores
@@ -83,50 +75,19 @@ public class MyLivro {
         return mMetaData;
     } //getAutor
 
+    public File getFile() {
+        return mFicheiro;
+    } //getAutor
+
     public void setMetaData(String mMetadata) {
         this.mMetaData = mMetadata;
     } //setAutor
 
+
     //Metodos
-    public void getContent() {
-        getConteudos(mFicheiro.getPath());
-
-        //2º Ir buscar o conteudo e dar às variáveis corretas
-    } //getContent
-
-    public void getConteudos(String path) {
-        try {
-            FileInputStream fin = new FileInputStream(path);
-            ZipInputStream zin = new ZipInputStream(fin);
-            ZipEntry ze = zin.getNextEntry();
-
-            String nomeDoDiretorio = ze.getName().split("/")[0];
-            zin.close();
-            fin.close();
-
-            if (mFiles.pastaJaExiste(nomeDoDiretorio))
-                preencherLivro(nomeDoDiretorio);
-            else
-                mFiles.unzip(this, path);
-        }catch (Exception e){
-            e.toString();
-        } //catch
-    } //getConteudos
-
-    private void preencherLivro(String nomeDoDiretorio) {
-        String metadata = mFiles.getTextoFromFicheiro(nomeDoDiretorio + "/META_INFO");
-        addMetadata(metadata);
-
-        File diretorioComOsFicheiros = new File(mActivity.getFilesDir(), nomeDoDiretorio + "/1/");
-        for(File ficheiro : diretorioComOsFicheiros.listFiles())
-            mPaginas.add(mFiles.getTextoFromFicheiro(nomeDoDiretorio + "/1/" + ficheiro.getName()));
-    } //preencherLivro
-
-
     public void addPagina(String conteudo, int numeroPagina){
         mPaginas.add(numeroPagina, conteudo);
     } //addPagina
-
 
     public void addMetadata(String conteudo){
         String [] valores = conteudo.split("\r\n");
@@ -138,23 +99,16 @@ public class MyLivro {
         mGenero = valores[5];
     } //addMetadata
 
-    public void getBasicData(){
-        String path = mFicheiro.getPath();
-        try {
-            FileInputStream fin = new FileInputStream(path);
-            ZipInputStream zin = new ZipInputStream(fin);
-            ZipEntry ze = zin.getNextEntry();
-
-            String nomeDoDiretorio = ze.getName().split("/")[0];
-            zin.close();
-            fin.close();
-
-            if (mFiles.pastaJaExiste(nomeDoDiretorio))
-                preencherLivro(nomeDoDiretorio);
-            else
-                mFiles.getMetadata(this, path);
-        }catch (Exception e){
-            e.toString();
-        } //catch
-    } //getBasicData
+    @Override
+    public boolean equals(Object o){
+        boolean bOsLivrosSaoIguais = false;
+        try{
+            MyLivro livro2 = (MyLivro) o;
+            bOsLivrosSaoIguais =
+                    livro2.getISBN() == getISBN() &&
+                            livro2.getAutor() == getAutor() &&
+                            livro2.getTitulo() == getTitulo();
+        } catch(Exception e) {}
+        return bOsLivrosSaoIguais;
+    } //equals
 } //MyLivro
