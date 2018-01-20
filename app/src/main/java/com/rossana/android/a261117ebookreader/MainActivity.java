@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     //Constantes da classe
-    public final static String ARRAY_LIVROS = "ARRAY_LIVROS";
+    public final static String KEY_ARRAY_LIVROS = "KEY_ARRAY_LIVROS";
 
     //Objetos da Classe
     Context mContext;
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         Button[] buttonsRelevantes = {mBtnOkPesquisa, mBtnFavoritos, mBtnRecentes};
         for (Button buttonDoMomento : buttonsRelevantes)
             buttonDoMomento.setOnClickListener(mClickHandler);
-
     } //init
 
     //TODO
@@ -98,23 +97,20 @@ public class MainActivity extends AppCompatActivity {
     private void sendResultadoPesquisa(String pStrTitulo, String pStrAutor, String itemSelecionado) {
         ArrayList<File> todosOsLivros = mFiles.getAllLivros();
         ArrayList<MyLivro> mLivros = new ArrayList<>();
-        ArrayList<MyLivro> livrosAceites = new ArrayList<>();
+        //ArrayList<MyLivro> livrosAceites = new ArrayList<>();
 
-        for (File livro : todosOsLivros)
-            mLivros.add(new MyLivro(this, livro));
-
-        for(MyLivro livro : mLivros){
-            String tituloDoLivro = livro.getTitulo();
-            String autorDoLivro = livro.getAutor();
-            if(tituloDoLivro.contains(pStrTitulo) && autorDoLivro.contains(pStrAutor))
-                livrosAceites.add(livro);
+        for (File livro : todosOsLivros) {
+            MyLivro l = new MyLivro(livro);
+            mFiles.getBasicData(l);
+            mLivros.add(l);
         } //for
-        sendListaDeLivros(livrosAceites);
+
+        sendListaDeLivros(mLivros);
     } //sendResultadoPesquisa
 
     private void sendListaDeLivros(ArrayList<MyLivro> pArrayLivros) {
         Intent intent = new Intent(this, MostrarListaActivity.class);
-        intent.putExtra(ARRAY_LIVROS, pArrayLivros);
+        intent.putExtra(KEY_ARRAY_LIVROS, pArrayLivros);
         startActivity(intent);
     } //sendListaDeLivros
 

@@ -26,12 +26,12 @@ public class LeituraActivity extends Activity {
     private ArrayList<String> mPaginas;
     private AmSoundsFromLivro mMusic;
     private String path;
+    private int mNumeroDaPagina = 0;
 
     //Métodos
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.do_leitura);
-
         init(savedInstanceState);
     } //onCreate
 
@@ -40,11 +40,14 @@ public class LeituraActivity extends Activity {
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
         mPaginas = new ArrayList<String>();
-        mIntentQueMeChamou = this.getIntent();
         mMusic = new AmSoundsFromLivro(this);
+
         swipe();
+
+        mIntentQueMeChamou = this.getIntent();
+
         recuperarDados(mIntentQueMeChamou);
-        displayPagina(0);
+        mMusic.getMusicas(path);
     } //init
     private void swipe(){
         mWvZonaLeitura.setOnTouchListener(new AmOnSwipeTouchListener(LeituraActivity.this) {
@@ -58,10 +61,13 @@ public class LeituraActivity extends Activity {
         });
     }
 
-    private void displayPagina(int i) {
-        mMusic.getMusicas(path);
-        mWvZonaLeitura.loadData(mPaginas.get(i), "text/html", null);
-        mMusic.playMusicas(mPaginas.get(i));
+    public void displayPagina() {
+        if(mNumeroDaPagina < 0)
+            mNumeroDaPagina = 0;
+        if (mNumeroDaPagina >= mPaginas.size())
+            mNumeroDaPagina = mPaginas.size() - 1;
+        mWvZonaLeitura.loadData(mPaginas.get(mNumeroDaPagina), "text/html", null);
+        mMusic.playMusicas(mPaginas.get(mNumeroDaPagina));
     } //displayPagina
 
     private void recuperarDados(Intent pPacoteComOsDados) {
@@ -73,7 +79,7 @@ public class LeituraActivity extends Activity {
             String nomeDoLivro = pPacoteComOsDados.getStringExtra(MostrarListaActivity.NOME_DO_LIVRO);
             mTvNomeLivro.setText(nomeDoLivro);
             path = pPacoteComOsDados.getStringExtra(MostrarListaActivity.PATH_DO_LIVRO);
-            } //if
+        } //if
     } //recuperarDados
 
 

@@ -113,7 +113,7 @@ public class AmRecentesDB extends SQLiteOpenHelper {
             db.close();
             return true;
         }
-        catch (Exception e){ }
+        catch (Exception e){ }// catch
         return false;
     } //apagarFavorito
 } //AmFavoritosDB
