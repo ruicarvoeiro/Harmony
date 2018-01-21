@@ -25,8 +25,8 @@ public class AmSoundsFromLivro {
     } //AmSoundsFromLivro
 
     public void playMusicas(String strHTMLaApresentar) {
-        String regexParaInicioComentario = "(<!--)";
-        String regexParaFimComentario = "(-->)";
+        String regexParaInicioComentario = "(?:<!--)";
+        String regexParaFimComentario = "(?:-->)";
         String regexParaConteudo = ".+";
 
         String regexParaEncontrarOsComentarios = regexParaInicioComentario + regexParaConteudo + regexParaFimComentario;
@@ -34,7 +34,7 @@ public class AmSoundsFromLivro {
         Matcher matchesEncontradas = padraoCompilado.matcher(strHTMLaApresentar);
 
         for(int i = 0; matchesEncontradas.find(); i++){
-            String comandoLimpo = matchesEncontradas.group(i);
+            String comandoLimpo = matchesEncontradas.group();
 
             int contagemDeCarateres = strHTMLaApresentar.indexOf(comandoLimpo);
             strHTMLaApresentar.replace(comandoLimpo, "");
