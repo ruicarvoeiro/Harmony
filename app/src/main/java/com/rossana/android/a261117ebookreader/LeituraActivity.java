@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,12 @@ public class LeituraActivity extends Activity {
     private TextView mTvNomeLivro;
     private WebView mWvZonaLeitura;
     private LinearLayout mLLLeitura;
+    private View mItemActionStar;
+    private View mItemActionEmptyStar;
+    private View mItemActionMarcador;
+    private View mItemActionGoHome;
+
+    private Toolbar mToolbar;
 
     //Outros Objetos
     private Intent mIntentQueMeChamou;
@@ -37,6 +45,12 @@ public class LeituraActivity extends Activity {
     } //onCreate
 
     private void init(Bundle saveState) {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        //setSupportActionBar(mToolbar);
+        //setActionBar(mToolbar);
+
         //Initializar variaveis
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
@@ -45,11 +59,18 @@ public class LeituraActivity extends Activity {
         mPaginas = new ArrayList<String>();
         mMusic = new AmSoundsFromLivro(this);
 
+        //Variaveis do menu
+        mItemActionStar = findViewById(R.id.idItemActionStar);
+        mItemActionEmptyStar = findViewById(R.id.idItemActionEmptyStar);
+        mItemActionMarcador = findViewById(R.id.idItemActionMarcador);
+        mItemActionGoHome = findViewById(R.id.IdItemActionGoHome);
+
         swipe();
 
         mIntentQueMeChamou = this.getIntent();
 
         recuperarDados(mIntentQueMeChamou);
+
         mMusic.getMusicas(path);
     } //init
 
@@ -63,14 +84,10 @@ public class LeituraActivity extends Activity {
                 mNumeroDaPagina++;
                 displayPagina();
             }
-            public void onSwipeTop() {
-                displayPagina();
-            }
-            public void onSwipeBottom() {
-                displayPagina();
-            }
         });
         mWvZonaLeitura.setVerticalScrollBarEnabled(true);
+        //pára o swipe e faz com que funcione o coiso para ir para baixo
+        mWvZonaLeitura.setOnTouchListener(null);
     } //swipe
 
     public void displayPagina() {
@@ -106,12 +123,45 @@ public class LeituraActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId==R.id.idItemActionEmptyStar || itemId==R.id.idItemActionStar) mudarEstrela();
+        if (itemId==R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
+        if (itemId==R.id.idItemActionStar) mudarEstrela(mItemActionStar);
+        if (itemId==R.id.IdItemActionGoHome) goBackToHome();
+        if (itemId==R.id.IdItemActionSemVolume) soundOff();
+        if (itemId==R.id.IdItemActionMarcador) marcador();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
 
-    void mudarEstrela(){
+    private void marcador() {
+        //highlight, css?
         //TODO
+    }
+
+    private void soundOff() {
+        //TODO
+        //mMusic.setSoundEffectsEnabled(false);
+    }
+
+    private void mudarEstrela(final View pItemSelecionado){
+        pItemSelecionado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pItemSelecionado == mItemActionStar){
+
+                }
+                if (pItemSelecionado == mItemActionEmptyStar){
+                    
+                }
+            }
+        });
+    }
+    private void goBackToHome(){
+        mItemActionGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent voltaParaHome = new Intent(LeituraActivity.this, MainActivity.class);
+                startActivity(voltaParaHome);
+            }
+        });
     }
     //////////////// END START MENU AJUDA////////////////
 } //LeituraActivity
