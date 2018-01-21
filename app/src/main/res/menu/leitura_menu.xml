@@ -2,17 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/idItemVolume"
-        android:title="Volume"/>
-    <item
-        android:id="@+id/idItemBrilho"
-        android:title="Brilho"/>
-    <item
         android:id="@+id/idItemLinguagem"
         android:title="Linguagem"/>
-    <item
-        android:id="@+id/idItemAparencia"
-        android:title="Aparencia"/>
     <item
         android:id="@+id/IdItemActionGoHome"
         android:icon="@drawable/ic_action_home"
@@ -21,32 +12,22 @@
     <item
         android:id="@+id/IdItemActionSemVolume"
         android:icon="@drawable/ic_action_volume_off"
-        android:title=""
-        app:showAsAction="always"/>
+        android:title="" />
     <item
         android:id="@+id/IdItemActionMarcador"
         android:icon="@drawable/ic_action_mark"
-        android:title=""
-        app:showAsAction="always"/>
+        android:title="" />
     <item
         android:id="@+id/IdItemActionFlag"
         android:icon="@drawable/ic_action_flag"
-        android:title=""
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/IdItemActionFont"
-        android:icon="@drawable/ic_action_font"
-        android:title=""
-        app:showAsAction="always"/>
+        android:title="" />
     <item
         android:id="@+id/idItemActionEmptyStar"
         android:icon="@drawable/ic_action_empty_star"
-        android:title=""
-        app:showAsAction="always"/>
+        android:title="" />
     <item
         android:id="@+id/idItemActionStar"
         android:icon="@drawable/ic_action_star"
-        app:showAsAction="always"
         android:visible="false"
         android:title=""/>
 </menu>

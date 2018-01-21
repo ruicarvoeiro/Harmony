@@ -11,7 +11,7 @@
     <string name="strTvSubTitulo">Bem-vindo</string>
     <string name="strHelpCenter">Ajuda</string>
     <string name="strAboutUs">*Rossana Naki, Rui Carvoeiro e João Barreiras*</string>
-    <string name="strAjuda">*Escrever aqui a ajuda*</string>
+    <string name="strAjuda">Ver video-relatório</string>
     <string name="strAboutUsCenter">About Us</string>
 
     <string-array name="nome_generos">

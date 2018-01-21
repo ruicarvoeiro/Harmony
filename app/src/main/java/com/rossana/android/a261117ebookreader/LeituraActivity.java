@@ -62,6 +62,12 @@ public class LeituraActivity extends Activity {
                 mNumeroDaPagina++;
                 displayPagina();
             }
+            public void onSwipeTop() {
+                displayPagina();
+            }
+            public void onSwipeBottom() {
+                displayPagina();
+            }
         });
     } //swipe
 
@@ -87,27 +93,23 @@ public class LeituraActivity extends Activity {
     } //recuperarDados
 
 
-    //O que é esta parte?
     ///////////////// START MENU AJUDA ////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu pMenu) {
         MenuInflater helper = this.getMenuInflater();
         helper.inflate(R.menu.leitura_menu, pMenu);
         return super.onCreateOptionsMenu(pMenu);
-
-    } //onCreateOptionsMenu
+    }//onCreateOptionsMenu
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.idItemActionEmptyStar ||
-                itemId == R.id.idItemActionStar) mudarEstrela();
+        if (itemId==R.id.idItemActionEmptyStar || itemId==R.id.idItemActionStar) mudarEstrela();
         return super.onOptionsItemSelected(item);
-    } //onOptionsItemSelected
+    }//onOptionsItemSelected
 
-    public void mudarEstrela() {
+    void mudarEstrela(){
         //TODO
-    } //mudarEstrela
-
+    }
     //////////////// END START MENU AJUDA////////////////
 } //LeituraActivity

@@ -6,15 +6,22 @@ rm -r
 */
 package com.rossana.android.a261117ebookreader;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -126,6 +133,29 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(KEY_ARRAY_LIVROS, pArrayLivros);
         startActivity(intent);
     } //sendListaDeLivros
+
+    //////////////// START MENU RELATED ////////////////
+    @Override
+    public boolean onCreateOptionsMenu(Menu pMenu) {
+        MenuInflater helper = this.getMenuInflater();
+        helper.inflate(R.menu.home_menu, pMenu);
+        return super.onCreateOptionsMenu(pMenu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId==R.id.idMenuItemHelpCenter) actionMenu(R.string.strAjuda);
+        if (itemId==R.id.idMenuItemAboutUs) actionMenu(R.string.strAboutUs);
+        return super.onOptionsItemSelected(item);
+    }//onOptionsItemSelected
+
+    void actionMenu(int pString){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+        mBuilder.setMessage(getString(pString));
+        mBuilder.show();
+    }
+    //////////////// END MENU RELATED ////////////////
+
 
     /* TODO LIST:
     * 1) Criar um ficheiro ou base de dados onde fiquem armazenados os favoritos
