@@ -45,12 +45,6 @@ public class LeituraActivity extends Activity {
     } //onCreate
 
     private void init(Bundle saveState) {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
-        //setSupportActionBar(mToolbar);
-        //setActionBar(mToolbar);
-
         //Initializar variaveis
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
@@ -63,7 +57,7 @@ public class LeituraActivity extends Activity {
         mItemActionStar = findViewById(R.id.idItemActionStar);
         mItemActionEmptyStar = findViewById(R.id.idItemActionEmptyStar);
         mItemActionMarcador = findViewById(R.id.idItemActionMarcador);
-        mItemActionGoHome = findViewById(R.id.IdItemActionGoHome);
+        mItemActionGoHome = findViewById(R.id.idItemActionGoHome);
 
         swipe();
 
@@ -125,9 +119,9 @@ public class LeituraActivity extends Activity {
         int itemId = item.getItemId();
         if (itemId==R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
         if (itemId==R.id.idItemActionStar) mudarEstrela(mItemActionStar);
-        if (itemId==R.id.IdItemActionGoHome) goBackToHome();
-        if (itemId==R.id.IdItemActionSemVolume) soundOff();
-        if (itemId==R.id.IdItemActionMarcador) marcador();
+        if (itemId==R.id.idItemActionGoHome) goBackToHome();
+        if (itemId==R.id.idItemActionSemVolume) soundOff();
+        if (itemId==R.id.idItemActionMarcador) marcador();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
 
@@ -149,7 +143,7 @@ public class LeituraActivity extends Activity {
 
                 }
                 if (pItemSelecionado == mItemActionEmptyStar){
-                    
+
                 }
             }
         });
