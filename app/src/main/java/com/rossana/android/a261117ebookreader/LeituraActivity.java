@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class LeituraActivity extends Activity {
     //Objetos do XML
     private TextView mTvNomeLivro;
     private WebView mWvZonaLeitura;
-    private ProgressBar mSpinnerDeProgresso;
+    private LinearLayout mLLLeitura;
 
     //Outros Objetos
     private Intent mIntentQueMeChamou;
@@ -40,7 +40,8 @@ public class LeituraActivity extends Activity {
         //Initializar variaveis
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
-        mSpinnerDeProgresso = (ProgressBar) findViewById(R.id.idPBCarregarLivro);
+        mWvZonaLeitura.setVerticalScrollBarEnabled(true);
+        mLLLeitura = (LinearLayout) findViewById(R.id.idLLLeitura);
         mPaginas = new ArrayList<String>();
         mMusic = new AmSoundsFromLivro(this);
 
@@ -63,6 +64,7 @@ public class LeituraActivity extends Activity {
                 displayPagina();
             }
         });
+        mWvZonaLeitura.setVerticalScrollBarEnabled(true);
     } //swipe
 
     public void displayPagina() {
@@ -94,7 +96,6 @@ public class LeituraActivity extends Activity {
         MenuInflater helper = this.getMenuInflater();
         helper.inflate(R.menu.leitura_menu, pMenu);
         return super.onCreateOptionsMenu(pMenu);
-
     } //onCreateOptionsMenu
 
     @Override

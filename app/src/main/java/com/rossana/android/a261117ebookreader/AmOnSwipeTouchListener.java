@@ -1,6 +1,7 @@
 package com.rossana.android.a261117ebookreader;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,8 +46,8 @@ class AmOnSwipeTouchListener implements View.OnTouchListener {
                         resultado = true;
                     }
                 }
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (Exception e) {
+                Log.e("@AmOnSwipeTouchListener", e.toString());
             }
             return resultado;
         }
