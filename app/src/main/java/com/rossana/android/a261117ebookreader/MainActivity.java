@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner mSpinner;
     private Button mBtnOkPesquisa, mBtnFavoritos, mBtnRecentes;
     private ProgressBar mPBCarregarListaDeLivros;
+
     //Handlers
     private View.OnClickListener mClickHandler;
 
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private AmUtil mUtil;
     private String[] mListaDeGeneros;
     private AmFiles mFiles;
+    private ArrayList<File> mLivrosFile;
+    private Intent mIntentQueMeChamou;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         mBtnRecentes = (Button) findViewById(R.id.idBtnRecentes);
         mPBCarregarListaDeLivros = (ProgressBar) findViewById(R.id.idPBCarregarListaDeLivros);
         mPBCarregarListaDeLivros.setVisibility(View.GONE);
+        mIntentQueMeChamou = this.getIntent();
+        mLivrosFile = getArrayListEnviado(mIntentQueMeChamou);
 
         mUtil = new AmUtil(this);
         mFiles = new AmFiles(this);
@@ -95,6 +100,15 @@ public class MainActivity extends AppCompatActivity {
             buttonDoMomento.setOnClickListener(mClickHandler);
     } //init
 
+    private ArrayList getArrayListEnviado(Intent dadosRecebidos) {
+        ArrayList ret = new ArrayList();
+        if (dadosRecebidos != null){
+            ArrayList<File> livrosRecebidos = (ArrayList<File>) dadosRecebidos.getSerializableExtra(SplashScreen.KEY_ALL_LIVROS);
+            ret = livrosRecebidos == null ? ret : livrosRecebidos;
+        } //if
+        return ret;
+    } //getArrayListEnviado
+
     //TODO
     private void sendRecentes() {
         sendListaDeLivros(null);
@@ -107,11 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO
     private void sendResultadoPesquisa(String pStrTitulo, String pStrAutor, String itemSelecionado) {
-        ArrayList<File> todosOsLivros = mFiles.getAllLivros();
         ArrayList<MyLivro> mLivros = new ArrayList<>();
-        //ArrayList<MyLivro> livrosAceites = new ArrayList<>();
-
-        for (File livro : todosOsLivros) {
+        for (File livro : mLivrosFile) {
             MyLivro l = new MyLivro(livro);
             mFiles.getBasicData(l);
             if(livroNaoEstaNaLista(l, mLivros))

@@ -43,7 +43,7 @@ public class AmSoundsFromLivro {
             comandoLimpo = comandoLimpo.replaceAll("-->", "");
             comandoLimpo.trim();
 
-            int tempo = getTempo(contagemDeCarateres, comandoLimpo);
+            int tempo = getTempo(contagemDeCarateres, strHTMLaApresentar);
             executarComando(comandoLimpo, tempo);
         } //while
     } //playMusicas
@@ -103,7 +103,7 @@ public class AmSoundsFromLivro {
     public int getTempo(int carateresAtePosicao, String texto) {
         String textoAnalisar = texto.substring(0, carateresAtePosicao);
         int numeroDePalavras = textoAnalisar.split(" ").length - 1;
-        return Math.round(numeroDePalavras * 1000 * (250 / 60));
+        return Math.round(numeroDePalavras *(250 / 60));
     } //getTempo
 
     public void musicasCarregadas(){
