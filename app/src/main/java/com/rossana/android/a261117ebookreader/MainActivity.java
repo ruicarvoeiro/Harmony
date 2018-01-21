@@ -107,11 +107,19 @@ public class MainActivity extends AppCompatActivity {
         for (File livro : todosOsLivros) {
             MyLivro l = new MyLivro(livro);
             mFiles.getBasicData(l);
-            mLivros.add(l);
+            if(livroNaoEstaNaLista(l, mLivros))
+                mLivros.add(l);
         } //for
 
         sendListaDeLivros(mLivros);
     } //sendResultadoPesquisa
+
+    private boolean livroNaoEstaNaLista(MyLivro l, ArrayList<MyLivro> mLivros) {
+        for(MyLivro livroDaLista : mLivros)
+            if(livroDaLista.equals(l))
+                return false;
+        return true;
+    }
 
     private void sendListaDeLivros(ArrayList<MyLivro> pArrayLivros) {
         Intent intent = new Intent(this, MostrarListaActivity.class);

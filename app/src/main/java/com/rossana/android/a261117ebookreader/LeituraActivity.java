@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -52,17 +51,19 @@ public class LeituraActivity extends Activity {
         recuperarDados(mIntentQueMeChamou);
         mMusic.getMusicas(path);
     } //init
+
     private void swipe(){
         mWvZonaLeitura.setOnTouchListener(new AmOnSwipeTouchListener(LeituraActivity.this) {
             public void onSwipeRight() {
-                Toast.makeText(LeituraActivity.this, "right", Toast.LENGTH_SHORT).show();
+                mNumeroDaPagina--;
+                displayPagina();
             }
             public void onSwipeLeft() {
-                Toast.makeText(LeituraActivity.this, "left", Toast.LENGTH_SHORT).show();
+                mNumeroDaPagina++;
+                displayPagina();
             }
-
         });
-    }
+    } //swipe
 
     public void displayPagina() {
         if(mNumeroDaPagina < 0)

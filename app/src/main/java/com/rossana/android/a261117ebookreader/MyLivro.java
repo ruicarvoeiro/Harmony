@@ -105,9 +105,9 @@ public class MyLivro implements Serializable {
         try{
             MyLivro livro2 = (MyLivro) o;
             bOsLivrosSaoIguais =
-                    livro2.getISBN() == getISBN() &&
-                            livro2.getAutor() == getAutor() &&
-                            livro2.getTitulo() == getTitulo();
+                    livro2.getISBN().equals(getISBN()) &&
+                            livro2.getAutor().equals(getAutor()) &&
+                            livro2.getTitulo().equals(getTitulo());
         } catch(Exception e) {}
         return bOsLivrosSaoIguais;
     } //equals
