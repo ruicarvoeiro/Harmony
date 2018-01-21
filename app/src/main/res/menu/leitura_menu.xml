@@ -5,12 +5,12 @@
         android:id="@+id/idItemLinguagem"
         android:title="Linguagem"/>
     <item
-        android:id="@+id/IdItemActionGoHome"
+        android:id="@+id/idItemActionGoHome"
         android:icon="@drawable/ic_action_home"
         android:title=""
         app:showAsAction="always"/>
     <item
-        android:id="@+id/IdItemActionSemVolume"
+        android:id="@+id/idItemActionSemVolume"
         android:icon="@drawable/ic_action_volume_off"
         android:title=""
         app:showAsAction="always"/>
