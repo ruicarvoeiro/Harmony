@@ -109,7 +109,7 @@ public class AmSoundsFromLivro {
     public int getTempo(int carateresAtePosicao, String texto) {
         String textoAnalisar = texto.substring(0, carateresAtePosicao);
         int numeroDePalavras = textoAnalisar.split(" ").length - 1;
-        return Math.round(numeroDePalavras *(250 / 60));
+        return Math.round(numeroDePalavras *(250 / 60) * 10);
     } //getTempo
 
     public void musicasCarregadas(){
