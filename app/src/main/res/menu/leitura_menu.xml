@@ -2,21 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/idItemLinguagem"
-        android:title="Linguagem"/>
-    <item
-        android:id="@+id/idItemActionGoHome"
-        android:icon="@drawable/ic_action_home"
-        android:title=""
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/idItemActionSemVolume"
         android:icon="@drawable/ic_action_volume_off"
-        android:title=""
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/idItemActionMarcador"
-        android:icon="@drawable/ic_action_mark"
         android:title=""
         app:showAsAction="always"/>
     <item
@@ -29,5 +16,5 @@
         android:icon="@drawable/ic_action_star"
         android:visible="false"
         android:title=""
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

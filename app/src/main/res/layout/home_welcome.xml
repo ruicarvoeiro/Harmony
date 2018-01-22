@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-
             android:id="@+id/idTvSubtitulo"
             android:text="Harmony"/>
 
@@ -22,7 +21,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:id="@+id/idEtTitulo"
             android:hint="@string/strEtTitulo"
             android:layout_marginTop="3dp"/>
@@ -30,7 +28,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:id="@+id/idEtAutor"
             android:hint="@string/strEtAutor"
             android:layout_marginTop="3dp"/>
@@ -38,7 +35,6 @@
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:id="@+id/idSGeneros"
             android:layout_marginTop="3dp"/>
     </LinearLayout>
@@ -47,22 +43,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
         android:orientation="horizontal">
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:id="@+id/idBtnRecentes"
-            android:text="@string/strBtnRecentes" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
             android:id="@+id/idBtnOkPesquisa"
             android:text="@string/strBtnOkPesquisa" />
 
@@ -70,7 +55,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
             android:id="@+id/idBtnFavoritos"
             android:text="@string/strBtnFavoritos" />
     </LinearLayout>

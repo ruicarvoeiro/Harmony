@@ -3,6 +3,8 @@ package com.rossana.android.a261117ebookreader;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.style.BackgroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,8 +21,6 @@ public class LeituraActivity extends AppCompatActivity {
     private WebView mWvZonaLeitura;
     private MenuItem mItemActionStar;
     private MenuItem mItemActionEmptyStar;
-    private MenuItem mItemActionMarcador;
-    private MenuItem mItemActionGoHome;
     //Outros Objetos
     private Intent mIntentQueMeChamou;
     private MyLivro mLivro;
@@ -44,8 +44,6 @@ public class LeituraActivity extends AppCompatActivity {
         //Variaveis do menu
         mItemActionStar = (MenuItem) findViewById(R.id.idItemActionStar);
         mItemActionEmptyStar = (MenuItem) findViewById(R.id.idItemActionEmptyStar);
-        mItemActionMarcador = (MenuItem) findViewById(R.id.idItemActionMarcador);
-        mItemActionGoHome = (MenuItem) findViewById(R.id.idItemActionGoHome);
         swipe();
 
         mLivro = recuperarDados(mIntentQueMeChamou);
@@ -103,34 +101,24 @@ public class LeituraActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if (itemId == R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
         if (itemId == R.id.idItemActionStar) mudarEstrela(mItemActionStar);
-        if (itemId == R.id.idItemActionGoHome) goBackToHome();
         if (itemId == R.id.idItemActionSemVolume) soundOff();
-        if (itemId == R.id.idItemActionMarcador) marcador();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
 
-    private void marcador() {
-        //highlight, css?
-        //TODO
-    }
-
     private void soundOff() {
-        //TODO
-        //mMusic.setSoundEffectsEnabled(false);
+        onPause();
     }
 
     private void mudarEstrela(MenuItem pItemSelecionado){
+        AmFavoritosDB favoritos = new AmFavoritosDB(LeituraActivity.this);
         if (pItemSelecionado == mItemActionStar){
             pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
-            //E se foress para o caralhinho?
+            favoritos.inserirFavorito(mLivro.getISBN());
         }
         if (pItemSelecionado == mItemActionEmptyStar){
             pItemSelecionado.setIcon(R.drawable.ic_action_star);
+            favoritos.apagarFavorito(mLivro.getISBN());
         }
-    }
-    private void goBackToHome(){
-        Intent voltaParaHome = new Intent(LeituraActivity.this, MainActivity.class);
-        startActivity(voltaParaHome);
     }
     //////////////// END START MENU AJUDA////////////////
 

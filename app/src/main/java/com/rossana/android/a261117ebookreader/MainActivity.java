@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     //Objetos do XML
     private EditText mEtTiulo, mEtAutor;
     private Spinner mSpinner;
-    private Button mBtnOkPesquisa, mBtnFavoritos, mBtnRecentes;
+    private Button mBtnOkPesquisa, mBtnFavoritos;
     private ProgressBar mPBCarregarListaDeLivros;
 
     //Handlers
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         mSpinner = (Spinner) findViewById(R.id.idSGeneros);
         mBtnOkPesquisa = (Button) findViewById(R.id.idBtnOkPesquisa);
         mBtnFavoritos = (Button) findViewById(R.id.idBtnFavoritos);
-        mBtnRecentes = (Button) findViewById(R.id.idBtnRecentes);
         mPBCarregarListaDeLivros = (ProgressBar) findViewById(R.id.idPBCarregarListaDeLivros);
         mPBCarregarListaDeLivros.setVisibility(View.GONE);
         mIntentQueMeChamou = this.getIntent();
@@ -90,12 +89,10 @@ public class MainActivity extends AppCompatActivity {
                 } //if
                 if (iQuemFoiClicked == R.id.idBtnFavoritos)
                     sendFavoritos();
-                if (iQuemFoiClicked == R.id.idBtnRecentes)
-                    sendRecentes();
             }//onItemClicked
         }; //mItemClickHandler
 
-        Button[] buttonsRelevantes = {mBtnOkPesquisa, mBtnFavoritos, mBtnRecentes};
+        Button[] buttonsRelevantes = {mBtnOkPesquisa, mBtnFavoritos};
         for (Button buttonDoMomento : buttonsRelevantes)
             buttonDoMomento.setOnClickListener(mClickHandler);
     } //init
@@ -108,11 +105,6 @@ public class MainActivity extends AppCompatActivity {
         } //if
         return ret;
     } //getArrayListEnviado
-
-    //TODO
-    private void sendRecentes() {
-        sendListaDeLivros(null);
-    } //sendRecentes
 
     //TODO
     private void sendFavoritos() {
