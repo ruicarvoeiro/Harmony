@@ -1,16 +1,15 @@
 package com.rossana.android.a261117ebookreader;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -18,18 +17,14 @@ import java.util.ArrayList;
  * Created by rui_c on 13/12/2017.
  */
 
-public class LeituraActivity extends Activity {
+public class LeituraActivity extends AppCompatActivity {
     //Objetos do XML
     private TextView mTvNomeLivro;
     private WebView mWvZonaLeitura;
-    private LinearLayout mLLLeitura;
-    private View mItemActionStar;
-    private View mItemActionEmptyStar;
-    private View mItemActionMarcador;
-    private View mItemActionGoHome;
-
-    private Toolbar mToolbar;
-
+    private MenuItem mItemActionStar;
+    private MenuItem mItemActionEmptyStar;
+    private MenuItem mItemActionMarcador;
+    private MenuItem mItemActionGoHome;
     //Outros Objetos
     private Intent mIntentQueMeChamou;
     private ArrayList<String> mPaginas;
@@ -49,7 +44,6 @@ public class LeituraActivity extends Activity {
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
         mWvZonaLeitura.setVerticalScrollBarEnabled(true);
-        mLLLeitura = (LinearLayout) findViewById(R.id.idLLLeitura);
         mPaginas = new ArrayList<String>();
         mMusic = new AmSoundsFromLivro(this);
 
@@ -135,27 +129,18 @@ public class LeituraActivity extends Activity {
         //mMusic.setSoundEffectsEnabled(false);
     }
 
-    private void mudarEstrela(final View pItemSelecionado){
-        pItemSelecionado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pItemSelecionado == mItemActionStar){
-
-                }
-                if (pItemSelecionado == mItemActionEmptyStar){
-
-                }
-            }
-        });
+    private void mudarEstrela(MenuItem pItemSelecionado){
+        if (pItemSelecionado == mItemActionStar){
+            pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
+            //E se foress para o caralhinho?
+        }
+        if (pItemSelecionado == mItemActionEmptyStar){
+            pItemSelecionado.setIcon(R.drawable.ic_action_star);
+        }
     }
     private void goBackToHome(){
-        mItemActionGoHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent voltaParaHome = new Intent(LeituraActivity.this, MainActivity.class);
-                startActivity(voltaParaHome);
-            }
-        });
+        Intent voltaParaHome = new Intent(LeituraActivity.this, MainActivity.class);
+        startActivity(voltaParaHome);
     }
     //////////////// END START MENU AJUDA////////////////
 } //LeituraActivity
