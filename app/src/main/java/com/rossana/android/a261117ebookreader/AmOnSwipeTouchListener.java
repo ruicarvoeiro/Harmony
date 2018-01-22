@@ -58,7 +58,7 @@ class AmOnSwipeTouchListener implements View.OnTouchListener {
   */          } catch (Exception e) {
                 Log.e("@AmOnSwipeTouchListener", e.toString());
             }
-            return resultado;
+            return false;
         }
     }
 

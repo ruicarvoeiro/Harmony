@@ -92,11 +92,17 @@ public class AmSoundsFromLivro {
 
         else if(eComandoStop){
             String nomeDoFicheiro = partesDoComando[1];
-
-            if(nomeDoFicheiro == "ALL")
-                mSoundPool.pararTudo();
-            else
-                mSoundPool.pararSom(nomeDoFicheiro);
+            if(tempo == 0) {
+                if (nomeDoFicheiro == "ALL")
+                    mSoundPool.pararTudo();
+                else
+                    mSoundPool.pararSom(nomeDoFicheiro);
+            }else {
+                if (nomeDoFicheiro == "ALL")
+                    mSoundPool.pararTodosOsSonsDepoisDeMilissegundos(tempo);
+                else
+                    mSoundPool.pararSomDepoisDeMilissegundos(nomeDoFicheiro, tempo);
+            }
         } //else if
     } //executarComando
 
@@ -116,4 +122,8 @@ public class AmSoundsFromLivro {
             webView.setVisibility(View.VISIBLE);
         mLeitura.displayPagina();
     } //musicasCarregadas
+
+    public void stopAllSounds(){
+        mSoundPool.pararTudo();
+    } //stopAllSounds
 } //AmSoundsFromLivro

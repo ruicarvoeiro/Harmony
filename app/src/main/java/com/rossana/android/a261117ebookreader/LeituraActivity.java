@@ -2,12 +2,10 @@ package com.rossana.android.a261117ebookreader;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -48,11 +46,10 @@ public class LeituraActivity extends AppCompatActivity {
         mMusic = new AmSoundsFromLivro(this);
 
         //Variaveis do menu
-        mItemActionStar = findViewById(R.id.idItemActionStar);
-        mItemActionEmptyStar = findViewById(R.id.idItemActionEmptyStar);
-        mItemActionMarcador = findViewById(R.id.idItemActionMarcador);
-        //mItemActionGoHome = findViewById(R.id.idItemActionGoHome);
-
+        mItemActionStar = (MenuItem) findViewById(R.id.idItemActionStar);
+        mItemActionEmptyStar = (MenuItem) findViewById(R.id.idItemActionEmptyStar);
+        mItemActionMarcador = (MenuItem) findViewById(R.id.idItemActionMarcador);
+        mItemActionGoHome = (MenuItem) findViewById(R.id.idItemActionGoHome);
         swipe();
 
         mIntentQueMeChamou = this.getIntent();
@@ -66,23 +63,24 @@ public class LeituraActivity extends AppCompatActivity {
         mWvZonaLeitura.setOnTouchListener(new AmOnSwipeTouchListener(LeituraActivity.this) {
             public void onSwipeRight() {
                 mNumeroDaPagina--;
+                if(mNumeroDaPagina < 0)
+                    mNumeroDaPagina = 0;
+                mMusic.stopAllSounds();
                 displayPagina();
             }
             public void onSwipeLeft() {
                 mNumeroDaPagina++;
+                if (mNumeroDaPagina >= mPaginas.size())
+                    mNumeroDaPagina = mPaginas.size() - 1;
                 displayPagina();
             }
         });
         mWvZonaLeitura.setVerticalScrollBarEnabled(true);
         //pára o swipe e faz com que funcione o coiso para ir para baixo
-        mWvZonaLeitura.setOnTouchListener(null);
+        //mWvZonaLeitura.setOnTouchListener(null);
     } //swipe
 
     public void displayPagina() {
-        if(mNumeroDaPagina < 0)
-            mNumeroDaPagina = 0;
-        if (mNumeroDaPagina >= mPaginas.size())
-            mNumeroDaPagina = mPaginas.size() - 1;
         mWvZonaLeitura.loadData(mPaginas.get(mNumeroDaPagina), "text/html", null);
         mMusic.playMusicas(mPaginas.get(mNumeroDaPagina));
     } //displayPagina
@@ -111,11 +109,11 @@ public class LeituraActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId==R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
-        if (itemId==R.id.idItemActionStar) mudarEstrela(mItemActionStar);
-        //if (itemId==R.id.idItemActionGoHome) goBackToHome();
-        //if (itemId==R.id.idItemActionSemVolume) soundOff();
-        if (itemId==R.id.idItemActionMarcador) marcador();
+        if (itemId == R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
+        if (itemId == R.id.idItemActionStar) mudarEstrela(mItemActionStar);
+        if (itemId == R.id.idItemActionGoHome) goBackToHome();
+        if (itemId == R.id.idItemActionSemVolume) soundOff();
+        if (itemId == R.id.idItemActionMarcador) marcador();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
 
@@ -143,4 +141,10 @@ public class LeituraActivity extends AppCompatActivity {
         startActivity(voltaParaHome);
     }
     //////////////// END START MENU AJUDA////////////////
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMusic.stopAllSounds();
+    }
 } //LeituraActivity

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,10 +75,32 @@ public class AmSoundPool {
     } //tocarSom
 
     public void pararSom(String nome){
-        int musicaAParar = listaDeSons.get(nome);
-        if (mStreamsATocar.get(musicaAParar) != null)
-                mSoundPool.stop(musicaAParar);
+        try {
+            int musicaAParar = listaDeSons.get(nome);
+            if (mStreamsATocar.get(musicaAParar) != null)
+                mSoundPool.stop(mStreamsATocar.get(musicaAParar));
+        }catch(Exception e) {
+            Log.e("@TAG", e.toString());
+        }
     } //pararSom
+
+    public void pararSomDepoisDeMilissegundos(final String nome, long milissegundos){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pararSom(nome);
+            } //run
+        }, milissegundos);
+    } //tocarSomDepoisDeMilissegundosEmLoop
+
+    public void pararTodosOsSonsDepoisDeMilissegundos(long milissegundos){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pararTudo();
+            } //run
+        }, milissegundos);
+    } //pararTodosOsSonsDepoisDeMilissegundos
 
     public void pararTudo(){
         for (int musicaId : mStreamsATocar.values())
