@@ -26,9 +26,19 @@ public class MyLivro implements Serializable {
 
     //Construtores
     public MyLivro(File file) {
+        this();
         this.mFicheiro = file;
         mPaginas = new ArrayList<String>();
     } //MyLivro
+
+    public MyLivro(){
+        mTitulo = "";
+        mAutor = "";
+        mGenero = "";
+        mPaginas = new ArrayList<>();
+        mMetaData = "";
+        mISBN = "";
+    }
 
     //Acessores
     public String getTitulo() {

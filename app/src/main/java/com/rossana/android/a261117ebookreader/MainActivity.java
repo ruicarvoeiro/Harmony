@@ -11,8 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -108,7 +105,16 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO
     private void sendFavoritos() {
-        sendListaDeLivros(null);
+        AmFavoritosDB favoritos = new AmFavoritosDB(this);
+        ArrayList listaASerEnviada = new ArrayList();
+        Object[] valoresRecebidos = favoritos.getFavoritos().values().toArray();
+        for (int i = 0; i < valoresRecebidos.length; i++) {
+            MyLivro livro = new MyLivro();
+            mFiles.preencherLivro((String) valoresRecebidos[i], livro);
+            listaASerEnviada.add(livro);
+        } //for
+
+        sendListaDeLivros(listaASerEnviada);
     } //sendFavoritos
 
     //TODO

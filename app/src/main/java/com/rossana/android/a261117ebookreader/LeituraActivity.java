@@ -2,9 +2,8 @@ package com.rossana.android.a261117ebookreader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.style.BackgroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +25,7 @@ public class LeituraActivity extends AppCompatActivity {
     private MyLivro mLivro;
     private AmSoundsFromLivro mMusic;
     private int mNumeroDaPagina = 0;
+    private Menu mMenu;
 
     //Métodos
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class LeituraActivity extends AppCompatActivity {
         mWvZonaLeitura.setVerticalScrollBarEnabled(true);
         mMusic = new AmSoundsFromLivro(this);
         mIntentQueMeChamou = this.getIntent();
+
         //Variaveis do menu
         mItemActionStar = (MenuItem) findViewById(R.id.idItemActionStar);
         mItemActionEmptyStar = (MenuItem) findViewById(R.id.idItemActionEmptyStar);
@@ -91,6 +92,7 @@ public class LeituraActivity extends AppCompatActivity {
     ///////////////// START MENU AJUDA ////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu pMenu) {
+        mMenu = pMenu;
         MenuInflater helper = this.getMenuInflater();
         helper.inflate(R.menu.leitura_menu, pMenu);
         return super.onCreateOptionsMenu(pMenu);
@@ -99,27 +101,26 @@ public class LeituraActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
-        if (itemId == R.id.idItemActionStar) mudarEstrela(mItemActionStar);
-        if (itemId == R.id.idItemActionSemVolume) soundOff();
+        if (itemId == R.id.idItemActionEmptyStar) mudarEstrela();
+        if (itemId == R.id.idItemActionStar) mudarEstrela();
+        if (itemId == R.id.idItemActionSemVolume) mMusic.stopAllSounds();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
 
-    private void soundOff() {
-        onPause();
-    }
 
-    private void mudarEstrela(MenuItem pItemSelecionado){
+    private void mudarEstrela(){
+        MenuItem pItemSelecionado = mMenu.getItem(1);
         AmFavoritosDB favoritos = new AmFavoritosDB(LeituraActivity.this);
-        if (pItemSelecionado == mItemActionStar){
+        if (!(pItemSelecionado.getIcon() == ContextCompat.getDrawable(this, R.drawable.ic_action_empty_star))) {
             pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
+            mMenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_action_star));
             favoritos.inserirFavorito(mLivro.getISBN());
-        }
-        if (pItemSelecionado == mItemActionEmptyStar){
-            pItemSelecionado.setIcon(R.drawable.ic_action_star);
+        } else{
+            pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
+            mMenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_action_empty_star));
             favoritos.apagarFavorito(mLivro.getISBN());
         }
-    }
+    } //mudarEstrela
     //////////////// END START MENU AJUDA////////////////
 
     @Override

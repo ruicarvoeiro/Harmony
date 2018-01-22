@@ -237,7 +237,7 @@ public class AmFiles {
         } //catch
     } //getConteudos
 
-    private void preencherLivro(String nomeDoDiretorio, MyLivro mLivro) {
+    public void preencherLivro(String nomeDoDiretorio, MyLivro mLivro) {
         String metadata = getTextoFromFicheiro(nomeDoDiretorio + "/META_INFO");
         mLivro.addMetadata(metadata);
 

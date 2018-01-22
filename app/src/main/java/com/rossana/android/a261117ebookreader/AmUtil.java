@@ -93,7 +93,54 @@ public class AmUtil {
         return false;
     } //utilModernRequestPermission
 
-    public HashMap<String, Boolean> utilModernRequestPermissions(String[] straPermissionsToAsk, int pAppRequestCode, Boolean bShowToast) {
+    public boolean utilModernRequestPermissions(String [] strPermissionsToAsk, int pAppRequestCode, Boolean bShowToast) {
+        try{
+            ActivityCompat.requestPermissions(
+                    mActivity, //Activity
+                    strPermissionsToAsk,
+                    pAppRequestCode
+            );
+            if (bShowToast) {
+                utilFeedback(strPermissionsToAsk[0] + " GRANTED!");
+            }
+
+        }//try
+        catch (Exception e) {
+            if (bShowToast) {
+                utilFeedback(" FAIL!");
+            } //if
+        } //catch
+        //if (grantResults.length > 0
+        //&& grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        return true;
+    } //utilModernRequestPermissions
+
+    /*public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }*/
+
+
+    public HashMap<String, Boolean> utilModernRequestPermissions1(String[] straPermissionsToAsk, int pAppRequestCode, Boolean bShowToast) {
         HashMap<String, Boolean> ret = new HashMap<>();
 
         for (String strPermission : straPermissionsToAsk) {
