@@ -19,6 +19,7 @@ public class AmSoundPool {
     private int numeroDeSonsCarregados = 0;
     private Context mContext;
     private AmSoundsFromLivro mSoundsFromLivro;
+    private HashMap<Integer, Integer> mStreamsATocar;
 
     public AmSoundPool(ArrayList<String> listaDeFicheiros, float volume, Context context, AmSoundsFromLivro amSoundsFromLivro){
         this();
@@ -34,6 +35,7 @@ public class AmSoundPool {
     } //AmSoundPool
 
     public AmSoundPool(){
+        mStreamsATocar = new HashMap();
         volume = 1f;
     }
 
@@ -61,22 +63,24 @@ public class AmSoundPool {
 
     public void tocarSomEmLoop(String nome){
         int musicaATocar = listaDeSons.get(nome);
-        mSoundPool.play(musicaATocar, volume, volume, 1, -1, 1.0f);
+        int idDaStream = mSoundPool.play(musicaATocar, volume, volume, 1, -1, 1.0f);
+        mStreamsATocar.put(musicaATocar, idDaStream);
     } //tocarSomEmLoop
 
     public void tocarSom(String nome){
         int musicaATocar = listaDeSons.get(nome);
-
-        mSoundPool.play(musicaATocar, volume, volume, 0, 0, 1.0f);
+        int idDaStream = mSoundPool.play(musicaATocar, volume, volume, 1, 0, 1.0f);
+        mStreamsATocar.put(musicaATocar, idDaStream);
     } //tocarSom
 
     public void pararSom(String nome){
         int musicaAParar = listaDeSons.get(nome);
-        mSoundPool.stop(musicaAParar);
+        if (mStreamsATocar.get(musicaAParar) != null)
+                mSoundPool.stop(musicaAParar);
     } //pararSom
 
     public void pararTudo(){
-        for (int musicaId : listaDeSons.values())
+        for (int musicaId : mStreamsATocar.values())
             mSoundPool.stop(musicaId);
     } //pararTudo
 

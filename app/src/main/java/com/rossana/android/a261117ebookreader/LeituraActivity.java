@@ -48,10 +48,10 @@ public class LeituraActivity extends AppCompatActivity {
         mMusic = new AmSoundsFromLivro(this);
 
         //Variaveis do menu
-        mItemActionStar = (MenuItem) findViewById(R.id.idItemActionStar);
-        mItemActionEmptyStar = (MenuItem) findViewById(R.id.idItemActionEmptyStar);
-        mItemActionMarcador = (MenuItem) findViewById(R.id.idItemActionMarcador);
-        mItemActionGoHome = (MenuItem) findViewById(R.id.idItemActionGoHome);
+        mItemActionStar = findViewById(R.id.idItemActionStar);
+        mItemActionEmptyStar = findViewById(R.id.idItemActionEmptyStar);
+        mItemActionMarcador = findViewById(R.id.idItemActionMarcador);
+        //mItemActionGoHome = findViewById(R.id.idItemActionGoHome);
 
         swipe();
 
@@ -113,8 +113,8 @@ public class LeituraActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if (itemId==R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
         if (itemId==R.id.idItemActionStar) mudarEstrela(mItemActionStar);
-        if (itemId==R.id.idItemActionGoHome) goBackToHome();
-        if (itemId==R.id.idItemActionSemVolume) soundOff();
+        //if (itemId==R.id.idItemActionGoHome) goBackToHome();
+        //if (itemId==R.id.idItemActionSemVolume) soundOff();
         if (itemId==R.id.idItemActionMarcador) marcador();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
