@@ -27,7 +27,6 @@ public class AmSoundPool {
         mContext = context;
         carregarSons(listaDeFicheiros, context);
         this.volume = volume;
-        mStreamsATocar = new HashMap();
     } //AmSoundPool
 
     public AmSoundPool(AmSoundsFromLivro amSoundsFromLivro){
@@ -36,6 +35,7 @@ public class AmSoundPool {
     } //AmSoundPool
 
     public AmSoundPool(){
+        mStreamsATocar = new HashMap();
         volume = 1f;
     }
 

@@ -57,7 +57,7 @@ public class LeituraActivity extends Activity {
         mItemActionStar = findViewById(R.id.idItemActionStar);
         mItemActionEmptyStar = findViewById(R.id.idItemActionEmptyStar);
         mItemActionMarcador = findViewById(R.id.idItemActionMarcador);
-        mItemActionGoHome = findViewById(R.id.idItemActionGoHome);
+        //mItemActionGoHome = findViewById(R.id.idItemActionGoHome);
 
         swipe();
 
@@ -119,8 +119,8 @@ public class LeituraActivity extends Activity {
         int itemId = item.getItemId();
         if (itemId==R.id.idItemActionEmptyStar) mudarEstrela(mItemActionEmptyStar);
         if (itemId==R.id.idItemActionStar) mudarEstrela(mItemActionStar);
-        if (itemId==R.id.idItemActionGoHome) goBackToHome();
-        if (itemId==R.id.idItemActionSemVolume) soundOff();
+        //if (itemId==R.id.idItemActionGoHome) goBackToHome();
+        //if (itemId==R.id.idItemActionSemVolume) soundOff();
         if (itemId==R.id.idItemActionMarcador) marcador();
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
