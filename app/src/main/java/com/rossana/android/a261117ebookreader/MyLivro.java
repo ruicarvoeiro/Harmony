@@ -63,7 +63,7 @@ public class MyLivro implements Serializable {
         this.mGenero = mGenero;
     } //setAutor
 
-    public ArrayList getPaginas(){ return mPaginas;}
+    public ArrayList<String> getPaginas(){ return mPaginas;}
 
     public void setPaginas(ArrayList mCapitulos){ this.mPaginas = mCapitulos;}
 

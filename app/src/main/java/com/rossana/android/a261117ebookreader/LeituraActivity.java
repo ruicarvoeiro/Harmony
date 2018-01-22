@@ -9,8 +9,6 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 /**
  * Created by rui_c on 13/12/2017.
  */
@@ -25,9 +23,8 @@ public class LeituraActivity extends AppCompatActivity {
     private MenuItem mItemActionGoHome;
     //Outros Objetos
     private Intent mIntentQueMeChamou;
-    private ArrayList<String> mPaginas;
+    private MyLivro mLivro;
     private AmSoundsFromLivro mMusic;
-    private String path;
     private int mNumeroDaPagina = 0;
 
     //Métodos
@@ -42,9 +39,8 @@ public class LeituraActivity extends AppCompatActivity {
         mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
         mWvZonaLeitura.setVerticalScrollBarEnabled(true);
-        mPaginas = new ArrayList<String>();
         mMusic = new AmSoundsFromLivro(this);
-
+        mIntentQueMeChamou = this.getIntent();
         //Variaveis do menu
         mItemActionStar = (MenuItem) findViewById(R.id.idItemActionStar);
         mItemActionEmptyStar = (MenuItem) findViewById(R.id.idItemActionEmptyStar);
@@ -52,11 +48,9 @@ public class LeituraActivity extends AppCompatActivity {
         mItemActionGoHome = (MenuItem) findViewById(R.id.idItemActionGoHome);
         swipe();
 
-        mIntentQueMeChamou = this.getIntent();
+        mLivro = recuperarDados(mIntentQueMeChamou);
 
-        recuperarDados(mIntentQueMeChamou);
-
-        mMusic.getMusicas(path);
+        mMusic.getMusicas(mLivro.getISBN());
     } //init
 
     private void swipe(){
@@ -65,36 +59,34 @@ public class LeituraActivity extends AppCompatActivity {
                 mNumeroDaPagina--;
                 if(mNumeroDaPagina < 0)
                     mNumeroDaPagina = 0;
-                mMusic.stopAllSounds();
-                displayPagina();
+                else {
+                    mMusic.stopAllSounds();
+                    displayPagina();
+                }
             }
             public void onSwipeLeft() {
                 mNumeroDaPagina++;
-                if (mNumeroDaPagina >= mPaginas.size())
-                    mNumeroDaPagina = mPaginas.size() - 1;
-                displayPagina();
+                if (mNumeroDaPagina >= mLivro.getPaginas().size())
+                    mNumeroDaPagina = mLivro.getPaginas().size() - 1;
+                else displayPagina();
             }
         });
-        mWvZonaLeitura.setVerticalScrollBarEnabled(true);
-        //pára o swipe e faz com que funcione o coiso para ir para baixo
-        //mWvZonaLeitura.setOnTouchListener(null);
+        mWvZonaLeitura.setScrollContainer(true);
     } //swipe
 
     public void displayPagina() {
-        mWvZonaLeitura.loadData(mPaginas.get(mNumeroDaPagina), "text/html", null);
-        mMusic.playMusicas(mPaginas.get(mNumeroDaPagina));
+        String textoASerCarregado = mLivro.getPaginas().get(mNumeroDaPagina);
+        mWvZonaLeitura.loadData(textoASerCarregado, "text/html", null);
+        mMusic.playMusicas(textoASerCarregado);
     } //displayPagina
 
-    private void recuperarDados(Intent pPacoteComOsDados) {
+    private MyLivro recuperarDados(Intent pPacoteComOsDados) {
+        MyLivro livro = null;
         if (pPacoteComOsDados != null) {
-            ArrayList<String> paginasDoLivro = (ArrayList<String>)
-                    pPacoteComOsDados.getSerializableExtra(MostrarListaActivity.PAGINAS);
-
-            mPaginas = paginasDoLivro;
-            String nomeDoLivro = pPacoteComOsDados.getStringExtra(MostrarListaActivity.NOME_DO_LIVRO);
-            mTvNomeLivro.setText(nomeDoLivro);
-            path = pPacoteComOsDados.getStringExtra(MostrarListaActivity.PATH_DO_LIVRO);
+            livro = (MyLivro)
+                    pPacoteComOsDados.getSerializableExtra(MostrarListaActivity.KEY_LIVRO);
         } //if
+        return livro;
     } //recuperarDados
 
 

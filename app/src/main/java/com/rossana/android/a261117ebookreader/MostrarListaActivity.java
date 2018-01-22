@@ -15,9 +15,7 @@ import java.util.ArrayList;
 
 public class MostrarListaActivity extends AppCompatActivity {
     //Constantes
-    public final static String PAGINAS = "PAGINAS";
-    public final static String NOME_DO_LIVRO = "NOME_DO_LIVRO";
-    public final static String PATH_DO_LIVRO = "PATH_DO_LIVRO";
+    public final static String KEY_LIVRO = "KEY_LIVRO";
 
     //Elementos do XML
     private ListView mLvLivros;
@@ -75,11 +73,7 @@ public class MostrarListaActivity extends AppCompatActivity {
 
     private void sendLivroASerLido(MyLivro livro) {
         Intent intent = new Intent(this, LeituraActivity.class);
-        intent.putExtra(NOME_DO_LIVRO, livro.getTitulo());
-
-        intent.putExtra(PAGINAS, livro.getPaginas());
-
-        intent.putExtra(PATH_DO_LIVRO, livro.getISBN());
+        intent.putExtra(KEY_LIVRO, livro);
         startActivity(intent);
     } //sendListaDeLivros
 

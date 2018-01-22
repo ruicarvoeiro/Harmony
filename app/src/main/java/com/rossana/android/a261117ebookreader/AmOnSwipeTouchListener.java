@@ -46,16 +46,7 @@ class AmOnSwipeTouchListener implements View.OnTouchListener {
                         resultado = true;
                     }
                 }
-
-/*                else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffY < 0) {
-                        onSwipeTop();
-                    } else {
-                        onSwipeBottom();
-                    }
-                    resultado = true;
-                }
-  */          } catch (Exception e) {
+        } catch (Exception e) {
                 Log.e("@AmOnSwipeTouchListener", e.toString());
             }
             return false;
