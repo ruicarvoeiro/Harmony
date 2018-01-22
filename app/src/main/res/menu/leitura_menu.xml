@@ -29,5 +29,5 @@
         android:icon="@drawable/ic_action_star"
         android:visible="false"
         android:title=""
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>
