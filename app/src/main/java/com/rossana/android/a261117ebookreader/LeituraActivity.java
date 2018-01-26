@@ -112,7 +112,7 @@ public class LeituraActivity extends AppCompatActivity {
         MenuItem pItemSelecionado = mMenu.getItem(1);
         AmFavoritosDB favoritos = new AmFavoritosDB(LeituraActivity.this);
         if (!(pItemSelecionado.getIcon() == ContextCompat.getDrawable(this, R.drawable.ic_action_empty_star))) {
-            pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
+            //pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
             mMenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_action_star));
             favoritos.inserirFavorito(mLivro.getISBN());
         } else{
