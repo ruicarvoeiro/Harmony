@@ -14,22 +14,27 @@ import java.util.HashMap;
  */
 
 public class AmFavoritosDB extends SQLiteOpenHelper {
+    private SQLiteDatabase db;
     private final static String FAVORITOS_DB_NAME_FILE = "FAVORITOS_DB_NAME.DB";
-    private final static int FAVORITOS_DB_NAME_VERSION = 1;
+    private final static int FAVORITOS_DB_NAME_VERSION = 2;
     private final static String FAVORITOS_DB_NAME = "FAVORITOS";
 
     private final static String COL_ID = "ID";
     private final static String ISBN = "ISBN";
 
-    private final static String CREATE_TABLE_FAVORITOS =
-            "CREATE TABLE IF NOT EXISTS " + FAVORITOS_DB_NAME + "(" +
-                    COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    ISBN + " TEXT NOT NULL);";
+    private final static String CREATE_TABLE_FAVORITOS ="CREATE TABLE IF NOT EXISTS " +
+            FAVORITOS_DB_NAME + "(" +
+                    COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    ISBN + " TEXT NOT NULL\n" +
+            ");";
 
     private final static String DROP_TABLE_FAVORITOS = "DROP TABLE IF EXISTS " + FAVORITOS_DB_NAME +";";
 
     public AmFavoritosDB(Context pContext){
         super(pContext, FAVORITOS_DB_NAME_FILE,null, FAVORITOS_DB_NAME_VERSION);
+        db = this.getWritableDatabase();
+        //dropDB(db);
+        installDB(db);
     }
 
     public void installDB(SQLiteDatabase pDB){
@@ -41,15 +46,15 @@ public class AmFavoritosDB extends SQLiteOpenHelper {
         }
     }//installDB
 
-    public void reinstallDB(SQLiteDatabase pDB){
+    public void dropDB(SQLiteDatabase pDB){
         try{
             pDB.execSQL(DROP_TABLE_FAVORITOS);
         }
         catch(Exception e){
-            Log.e (this.getClass().getName(), e.toString()+ " FAILED@reinstallDB\n" + DROP_TABLE_FAVORITOS);
+            Log.e (this.getClass().getName(), e.toString()+ " FAILED@dropDB\n" + DROP_TABLE_FAVORITOS);
         }
         installDB(pDB);
-    } //reinstallDB
+    } //dropDB
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -58,13 +63,12 @@ public class AmFavoritosDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        reinstallDB(db);
+        dropDB(db);
     } //onUpgrade
 
     public HashMap<Integer, String> getFavoritos() {
         HashMap ret = new HashMap();
         try {
-                SQLiteDatabase db = this.getReadableDatabase();
                 String q = "SELECT * FROM " + FAVORITOS_DB_NAME;
 
                 String[] straMyFilters = null;
@@ -85,32 +89,49 @@ public class AmFavoritosDB extends SQLiteOpenHelper {
             }//catch
         return ret;
     } //getFavoritos
+    public boolean validarFavoritos(String ISBN) {
+        try {
+            String q = "SELECT * FROM " + FAVORITOS_DB_NAME + " where " + this.ISBN +"='"+ ISBN + "'";
+            String[] straMyFilters = null;
+
+            Cursor filteringSelectResults = db.rawQuery(q, straMyFilters);
+            db.close();
+            //creio que o problema está, não é bem ver se é o primeiro... Mas ver apenas se o livro já se encontra na BD
+            if (filteringSelectResults.isFirst()) return true;
+            else
+                return false;
+
+        }//try
+        catch (Exception e){
+            Log.e("Rossana feia", e.getMessage());
+            return false;
+        }//catch
+    } //getFavoritos
 
     public boolean inserirFavorito(String ISBN) {
         try {
-            SQLiteDatabase db = this.getWritableDatabase();
+            db = this.getWritableDatabase();
 
             ContentValues pares = new ContentValues();
-            pares.put(null, COL_ID);
-            pares.put(ISBN, this.ISBN);
-            db.insert(FAVORITOS_DB_NAME,null, pares);
+            //pares.put(COL_ID, null);
+            pares.put(this.ISBN, ISBN);
+            long correuTudoBem = db.insert(FAVORITOS_DB_NAME,null, pares);
 
             db.close();
-            return true;
+            Log.e("Insert", "MACOAS");
         }
-        catch (Exception e){ }
-        return false;
+        catch (Exception e){
+            Log.e("Insert", e.getMessage());
+            return false;
+        }
+return true;
     } //inserirFavorito
 
     public boolean apagarFavorito(String ISBN) {
         try {
-            SQLiteDatabase db = this.getWritableDatabase();
-
             String filtro = ISBN + "= ?";
             String[] valor = {ISBN};
-
             db.delete(FAVORITOS_DB_NAME, filtro, valor);
-
             db.close();
             return true;
         }

@@ -54,6 +54,7 @@ public class MostrarListaActivity extends AppCompatActivity {
         mLivroAdapter = new MyLivroAdapter(this, R.layout.livro_ll, mLivros);
         mLvLivros.setAdapter(mLivroAdapter);
 
+
         //Criacao dos handlers
         mItemClickHandler = new AdapterView.OnItemClickListener() {
             @Override
@@ -70,7 +71,6 @@ public class MostrarListaActivity extends AppCompatActivity {
         mLivroAdapter.notifyDataSetChanged();
     } //init
 
-
     private void sendLivroASerLido(MyLivro livro) {
         Intent intent = new Intent(this, LeituraActivity.class);
         intent.putExtra(KEY_LIVRO, livro);
@@ -80,6 +80,7 @@ public class MostrarListaActivity extends AppCompatActivity {
     void recuperarDados(Intent pPacoteComOsDados) {
         if (pPacoteComOsDados != null) {
             boolean temAKey = pPacoteComOsDados.hasExtra(MainActivity.KEY_ARRAY_LIVROS);
+
             ArrayList<MyLivro> livrosRecebidos = (ArrayList<MyLivro>)
                     pPacoteComOsDados.getSerializableExtra(MainActivity.KEY_ARRAY_LIVROS);
             mLivros = livrosRecebidos;

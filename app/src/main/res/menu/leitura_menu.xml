@@ -7,6 +7,12 @@
         android:title=""
         app:showAsAction="always"/>
     <item
+        android:id="@+id/idItemActionComVolume"
+        android:icon="@drawable/ic_action_volume_on"
+        android:visible="false"
+        android:title=""
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/idItemActionEmptyStar"
         android:icon="@drawable/ic_action_empty_star"
         android:title=""
@@ -17,4 +23,5 @@
         android:visible="false"
         android:title=""
         app:showAsAction="always"/>
+
 </menu>

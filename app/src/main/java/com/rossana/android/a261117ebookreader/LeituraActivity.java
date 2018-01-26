@@ -1,6 +1,7 @@
 package com.rossana.android.a261117ebookreader;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,7 @@ import android.widget.TextView;
 
 public class LeituraActivity extends AppCompatActivity {
     //Objetos do XML
-    private TextView mTvNomeLivro;
     private WebView mWvZonaLeitura;
-    private MenuItem mItemActionStar;
-    private MenuItem mItemActionEmptyStar;
     //Outros Objetos
     private Intent mIntentQueMeChamou;
     private MyLivro mLivro;
@@ -36,15 +34,11 @@ public class LeituraActivity extends AppCompatActivity {
 
     private void init(Bundle saveState) {
         //Initializar variaveis
-        mTvNomeLivro = (TextView) findViewById(R.id.idTvNomeLivro);
         mWvZonaLeitura = (WebView) findViewById(R.id.idWvZonaLeitura);
         mWvZonaLeitura.setVerticalScrollBarEnabled(true);
         mMusic = new AmSoundsFromLivro(this);
         mIntentQueMeChamou = this.getIntent();
 
-        //Variaveis do menu
-        mItemActionStar = (MenuItem) findViewById(R.id.idItemActionStar);
-        mItemActionEmptyStar = (MenuItem) findViewById(R.id.idItemActionEmptyStar);
         swipe();
 
         mLivro = recuperarDados(mIntentQueMeChamou);
@@ -95,30 +89,60 @@ public class LeituraActivity extends AppCompatActivity {
         mMenu = pMenu;
         MenuInflater helper = this.getMenuInflater();
         helper.inflate(R.menu.leitura_menu, pMenu);
+        validar();
         return super.onCreateOptionsMenu(pMenu);
     }//onCreateOptionsMenu
-
+    void validar(){
+        AmFavoritosDB favoritos = new AmFavoritosDB(LeituraActivity.this);
+        boolean valido = favoritos.validarFavoritos(mLivro.getISBN());
+        if(valido) {
+            mMenu.getItem(2).setVisible(false);
+            mMenu.getItem(3).setVisible(true);
+        }
+        if(!valido){
+            mMenu.getItem(2).setVisible(true);
+            mMenu.getItem(3).setVisible(false);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.idItemActionEmptyStar) mudarEstrela();
-        if (itemId == R.id.idItemActionStar) mudarEstrela();
-        if (itemId == R.id.idItemActionSemVolume) mMusic.stopAllSounds();
+        if (itemId == R.id.idItemActionEmptyStar) mudarEstrela(itemId);
+        if (itemId == R.id.idItemActionStar) mudarEstrela(itemId);
+        if (itemId == R.id.idItemActionSemVolume) musicaATocarOuNao(itemId);
+        if (itemId == R.id.idItemActionComVolume) musicaATocarOuNao(itemId);
         return super.onOptionsItemSelected(item);
     }//onOptionsItemSelected
 
+    private void musicaATocarOuNao(int itemID){
+        int somOff = mMenu.getItem(0).getItemId();
+        int somOn = mMenu.getItem(1).getItemId();
+        String textoASerCarregado = mLivro.getPaginas().get(mNumeroDaPagina);
+        if(itemID == somOff){
+            mMenu.getItem(1).setVisible(true);
+            mMusic.stopAllSounds();
+            mMenu.getItem(0).setVisible(false);
+        }
+        if(itemID == somOn){
+            mMenu.getItem(0).setVisible(true);
+            mMusic.playMusicas(textoASerCarregado);
+            mMenu.getItem(1).setVisible(false);
+        }
+    }
+    private void mudarEstrela(int itemID){
+        int estrelaVazia = mMenu.getItem(2).getItemId();
+        int estrelaCheia = mMenu.getItem(3).getItemId();
 
-    private void mudarEstrela(){
-        MenuItem pItemSelecionado = mMenu.getItem(1);
         AmFavoritosDB favoritos = new AmFavoritosDB(LeituraActivity.this);
-        if (!(pItemSelecionado.getIcon() == ContextCompat.getDrawable(this, R.drawable.ic_action_empty_star))) {
-            pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
-            mMenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_action_star));
+        if (itemID == estrelaVazia) {
+            mMenu.getItem(3).setVisible(true);
             favoritos.inserirFavorito(mLivro.getISBN());
-        } else{
-            pItemSelecionado.setIcon(R.drawable.ic_action_empty_star);
-            mMenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_action_empty_star));
+            mMenu.getItem(2).setVisible(false);
+        }
+        if (itemID == estrelaCheia) {
+            mMenu.getItem(2).setVisible(true);
             favoritos.apagarFavorito(mLivro.getISBN());
+            mMenu.getItem(3).setVisible(false);
         }
     } //mudarEstrela
     //////////////// END START MENU AJUDA////////////////
